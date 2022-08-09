@@ -1,0 +1,5 @@
+
+
+pers.warren.ioc.annotation.Configuration = {
+    org.needcoke.coke.web.WebScannerConfig
+}
