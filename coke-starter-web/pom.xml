@@ -19,7 +19,6 @@
         <dependency>
             <groupId>org.needcoke</groupId>
             <artifactId>coke</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.needcoke</groupId>

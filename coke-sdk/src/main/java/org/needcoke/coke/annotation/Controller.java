@@ -10,4 +10,6 @@ public @interface Controller {
     String name() default "";
 
     String value() default "";
+
+    String[] mapping() default {""};
 }

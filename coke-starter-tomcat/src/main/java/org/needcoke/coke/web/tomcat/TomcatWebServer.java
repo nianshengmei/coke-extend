@@ -1,4 +1,4 @@
-package org.needcoke.coke.web.embeded;
+package org.needcoke.coke.web.tomcat;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

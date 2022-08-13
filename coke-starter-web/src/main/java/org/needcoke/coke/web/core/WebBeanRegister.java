@@ -30,7 +30,8 @@ public class WebBeanRegister implements BeanRegister {
             );
             builder.setRegister(this);
             beanDefinition = builder.build();
-            builder.setScanByAnnotation(Controller.class);
+            builder.setScanByAnnotationClass(Controller.class);
+            builder.setScanByAnnotation(metadata.getAnnotation(Controller.class));
         }
         registerBeanDefinition(builder, registry);
         return beanDefinition;
