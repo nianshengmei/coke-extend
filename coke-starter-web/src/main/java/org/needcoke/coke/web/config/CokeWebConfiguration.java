@@ -1,4 +1,4 @@
-package org.needcoke.coke.web.core;
+package org.needcoke.coke.web.config;
 
 import lombok.Data;
 import pers.warren.ioc.annotation.Configuration;

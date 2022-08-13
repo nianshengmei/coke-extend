@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
-import org.needcoke.coke.web.core.CokeWebConfiguration;
+import org.needcoke.coke.web.config.CokeWebConfiguration;
 import org.needcoke.coke.web.core.WebServer;
 import org.needcoke.coke.web.core.WebServerException;
 

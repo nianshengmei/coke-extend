@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 拦截器接口
+ *
+ * @author warren
  */
 public interface Interceptor {
 
