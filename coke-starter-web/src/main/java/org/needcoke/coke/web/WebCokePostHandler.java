@@ -24,7 +24,6 @@ public class WebCokePostHandler extends CokeApplication implements CokePostHandl
 
     @Override
     public void run() {
-        loadContext();
         tomcat = new Tomcat();
         tomcat.setBaseDir(System.getProperty("java.io.tmpdir"));
         tomcat.setPort(port);

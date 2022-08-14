@@ -6,4 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface POST {
+
+
+    String value() default "";
 }
