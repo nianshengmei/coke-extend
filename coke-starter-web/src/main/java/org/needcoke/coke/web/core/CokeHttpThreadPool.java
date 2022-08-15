@@ -7,6 +7,7 @@ package org.needcoke.coke.web.core;
  */
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.needcoke.coke.web.constant.ThreadPoolDefaultValue;
 import pers.warren.ioc.annotation.Autowired;
 import pers.warren.ioc.annotation.Component;
@@ -15,12 +16,17 @@ import pers.warren.ioc.annotation.Value;
 import java.util.concurrent.*;
 
 @Component
+@Slf4j
 public class CokeHttpThreadPool {
+
+    public CokeHttpThreadPool() {
+        log.info("web thread pool start ok ！core pool size = {},max pool size = {}", iocCoreThreadPoolSize, iocMaximumPoolSize);
+    }
 
     @Autowired
     private static CokeHttpThreadPool threadPool;
 
-    public static CokeHttpThreadPool getCoreThreadPool(){
+    public static CokeHttpThreadPool getCoreThreadPool() {
         return CokeHttpThreadPool.threadPool;
     }
 
@@ -48,7 +54,7 @@ public class CokeHttpThreadPool {
      * threadFactory   创建线程的工厂类
      * handler         拒绝策略类,当线程池数量达到上线并且workQueue队列长度达到上限时就需要对到来的任务做拒绝处理
      */
-    private  ExecutorService service = new ThreadPoolExecutor(
+    private ExecutorService service = new ThreadPoolExecutor(
             iocCoreThreadPoolSize,
             iocMaximumPoolSize,
             iocKeepAliveTime,
@@ -60,6 +66,7 @@ public class CokeHttpThreadPool {
 
     /**
      * 获取线程池
+     *
      * @return 线程池
      */
     public ExecutorService getExecutorService() {
@@ -68,6 +75,7 @@ public class CokeHttpThreadPool {
 
     /**
      * 使用线程池创建线程并异步执行任务
+     *
      * @param r 任务
      */
     public void newTask(Runnable r) {
@@ -76,8 +84,8 @@ public class CokeHttpThreadPool {
 
     @Override
     public String toString() {
-        return "ThreadPool{iocCoreThreadPoolSize = "+iocCoreThreadPoolSize+" , iocMaximumPoolSize = "+iocMaximumPoolSize+"" +
-                " , iocKeepAliveTime = "+iocKeepAliveTime+" }";
+        return "ThreadPool{iocCoreThreadPoolSize = " + iocCoreThreadPoolSize + " , iocMaximumPoolSize = " + iocMaximumPoolSize + "" +
+                " , iocKeepAliveTime = " + iocKeepAliveTime + " }";
     }
 
 }
