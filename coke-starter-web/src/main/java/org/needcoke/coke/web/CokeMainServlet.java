@@ -27,7 +27,7 @@ public class CokeMainServlet extends HttpServlet {
         String requestURI = req.getRequestURI();
         CokeHttpThreadPool.getCoreThreadPool().newTask(new WebFunctionTask(httpType, requestURI,
                 req.getParameterMap(),
-                resp.getWriter()));
+                resp));
     }
 
 

@@ -2,6 +2,8 @@ package org.needcoke.coke.web.core;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -18,14 +20,14 @@ public abstract class WebTask implements Runnable {
 
     protected Map<String, String[]> parameterMap;
 
-    protected PrintWriter writer;
+    protected HttpServletResponse httpServletResponse;
 
     public WebTask(HttpType httpType, String requestUri, Map<String, String[]> parameterMap,
-                   PrintWriter writer) {
+                   HttpServletResponse resp) {
         this.httpType = httpType;
         this.requestUri = requestUri;
         this.parameterMap = parameterMap;
-        this.writer = writer;
+        this.httpServletResponse = resp;
     }
 
     @Override

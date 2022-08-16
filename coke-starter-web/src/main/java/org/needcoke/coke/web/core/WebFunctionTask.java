@@ -1,15 +1,22 @@
 package org.needcoke.coke.web.core;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.coke.web.util.ParameterUtil;
 import pers.warren.ioc.core.Container;
 import pers.warren.ioc.util.ReflectUtil;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -21,8 +28,8 @@ public class WebFunctionTask extends WebTask {
     private final WebApplicationContext applicationContext = Container.getContainer().getBean(WebApplicationContext.class);
 
     public WebFunctionTask(HttpType httpType, String requestUri, Map<String, String[]> parameterMap,
-                           PrintWriter writer) {
-        super(httpType, requestUri, parameterMap, writer);
+                           HttpServletResponse resp) {
+        super(httpType, requestUri, parameterMap, resp);
     }
 
     @Override
@@ -33,7 +40,23 @@ public class WebFunctionTask extends WebTask {
     @Override
     public void realRun() {
         log.info("httpType = {} , requestUri = {}", httpType.name(), requestUri);
+        if (requestUri.equals("/favicon.ico") && httpType == HttpType.GET) {
+            try {
+                favicon();
+            }catch (Exception e){
+                throw new RuntimeException();
+            }
+            return;
+        }
         WebFunction webFunction = applicationContext.getWebFunction(httpType, requestUri);
+        if (null == webFunction) {
+            try {
+                errorPage("500");
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+            return;
+        }
         Method invokeMethod = webFunction.getInvokeMethod();
         String beanName = webFunction.getInvokeBeanName();
         Container container = Container.getContainer();
@@ -54,22 +77,30 @@ public class WebFunctionTask extends WebTask {
         try {
             Object invoke = md.invoke(bean, parameters);
             String json = new Gson().toJson(invoke);
-            writer.write(json);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
+            httpServletResponse.setContentType("application/json");
+            httpServletResponse.setCharacterEncoding("UTF-8");
+            httpServletResponse.getWriter().write(json);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
-//    private void favicon() throws IOException {
-//        httpServletResponse.setContentType("image/x-icon");
-//        InputStream stream = ResourceUtil.getStream("favicon.ico");
-//        ServletOutputStream outputStream = httpServletResponse.getOutputStream();
-//        outputStream.write(IoUtil.readBytes(stream));
-//        outputStream.flush();
-//    }
+    private void favicon() throws IOException {
+        httpServletResponse.setContentType("image/x-icon");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        InputStream stream = ResourceUtil.getStream("favicon.ico");
+        ServletOutputStream outputStream = httpServletResponse.getOutputStream();
+        outputStream.write(IoUtil.readBytes(stream));
+        outputStream.flush();
+    }
+
+    private void errorPage(String errorCode) throws Exception {
+        String html = ResourceUtil.readUtf8Str("ERROR-PAGE/" + errorCode + ".html");
+        html = html.replaceAll("\r", "").replaceAll("\n", "");
+        httpServletResponse.setContentType("text/html;charset=utf-8");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.getWriter().write(html);
+    }
 
 
 }
