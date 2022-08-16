@@ -33,7 +33,7 @@ public class CokeHttpThreadPool {
     /**
      * 自定义线程名称,方便的出错的时候溯源
      */
-    private ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("test-pool-%d").build();
+    private ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("coke-web-core-pool-%d").build();
 
     @Value("coke.web.pool.coreSize")
     private int iocCoreThreadPoolSize = ThreadPoolDefaultValue.CORE_SIZE;
