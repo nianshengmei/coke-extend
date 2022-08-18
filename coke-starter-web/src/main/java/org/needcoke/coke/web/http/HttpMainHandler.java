@@ -2,6 +2,8 @@ package org.needcoke.coke.web.http;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.util.StrUtil;
+import org.needcoke.coke.web.annotation.RequestParam;
 import org.needcoke.coke.web.core.WebFunction;
 import org.needcoke.coke.web.util.ParameterUtil;
 import pers.warren.ioc.annotation.Component;
@@ -11,6 +13,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Map;
 
 @Component
@@ -24,6 +27,9 @@ public class HttpMainHandler implements CokeHttpHandler {
     }
 
 
+    /**
+     * 没有匹配的uri的时候
+     */
     private int noMatchUri(CokeHttpContext context) throws Exception {
         String uri = context.getUri();
         if (uri.equals("GET /favicon.ico")) {
@@ -34,7 +40,9 @@ public class HttpMainHandler implements CokeHttpHandler {
 
     }
 
-
+    /**
+     * 处理fovicon的处理逻辑
+     */
     private int favicon(CokeHttpContext context) throws Exception {
         HttpServletResponse response = context.getResponse();
         response.setContentType("image/x-icon");
@@ -61,13 +69,22 @@ public class HttpMainHandler implements CokeHttpHandler {
         String beanName = webFunction.getInvokeBeanName();
         Object bean = context.getApplicationContext().getBean(beanName);
         Class<?>[] parameterTypes = invokeMethod.getParameterTypes();
-        String[] parameterNames = ReflectUtil.getParameterNames(invokeMethod);
+        String[] parameterNames = getParameterNames(invokeMethod);
         Map<String, String[]> paramMap = context.paramMap();
         Object[] parameters = getParams(parameterTypes, parameterNames, paramMap);
         Method md = webFunction.getInvokeMethod();
         Object invoke = md.invoke(bean, parameters);
         context.writeJson(invoke);
         return 0;
+    }
+
+    private Object[] getParams(CokeHttpContext context,Method method) {
+        Parameter[] parameters = method.getParameters();
+        Object[] invokeParams = new Object[parameters.length];
+
+
+
+        return invokeParams;
     }
 
     private Object[] getParams(Class<?>[] parameterTypes, String[] parameterNames, Map<String, String[]> paramMap) {
@@ -82,6 +99,18 @@ public class HttpMainHandler implements CokeHttpHandler {
             }
         }
         return parameters;
+    }
+
+    private String[] getParameterNames(Method method){
+        String[] parameterNames = ReflectUtil.getParameterNames(method);
+        Parameter[] parameters = method.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
+            if(null != requestParam && StrUtil.isNotEmpty(requestParam.value())){
+                parameterNames[i] = requestParam.value();
+            }
+        }
+        return parameterNames;
     }
 
 }

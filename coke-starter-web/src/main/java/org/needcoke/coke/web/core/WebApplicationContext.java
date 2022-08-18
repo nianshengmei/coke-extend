@@ -15,6 +15,8 @@ public class WebApplicationContext extends ApplicationContext {
 
     private final Map<String, WebFunction> httpFunctionMap = new HashMap<>();
 
+    private final Map<String, String> pathVariableFunctionMap = new HashMap<>();
+
     public void addWebFunction(HttpType httpType, String requestUri, WebFunction webFunction) {
         httpFunctionMap.put(httpType.name() + " " + requestUri, webFunction);
     }
@@ -28,11 +30,15 @@ public class WebApplicationContext extends ApplicationContext {
     }
 
     public void addWebFunction(HttpType httpType, String requestUri, String invokeBeanName, Method invokeMethod) {
-        httpFunctionMap.put(httpType.name() + " " + requestUri,
+        String scanUri = httpType.name() + " " + requestUri;
+        httpFunctionMap.put(scanUri,
                 new WebFunction()
                         .setHttpType(httpType)
                         .setInvokeBeanName(invokeBeanName)
                         .setInvokeMethod(invokeMethod)
         );
+        if (scanUri.contains("{") && scanUri.contains("}")) {
+
+        }
     }
 }
