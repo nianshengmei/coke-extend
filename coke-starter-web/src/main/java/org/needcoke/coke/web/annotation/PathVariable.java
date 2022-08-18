@@ -8,4 +8,15 @@ import java.lang.annotation.*;
 public @interface PathVariable {
 
     String value() default "";
+
+    /**
+     *
+     * GET /user/get/{userId}/must
+     *
+     * String[] ss = {"user","get","{userId}","must"}
+     *
+     * GET /user/get/S001/must
+     *
+     * String[] ss = {"user","get","S001","must"}
+     */
 }

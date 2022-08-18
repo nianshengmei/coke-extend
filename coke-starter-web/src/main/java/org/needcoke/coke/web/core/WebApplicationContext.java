@@ -15,6 +15,7 @@ public class WebApplicationContext extends ApplicationContext {
 
     private final Map<String, WebFunction> httpFunctionMap = new HashMap<>();
 
+    //  GET user/get/{id}  ->id
     private final Map<String, String> pathVariableFunctionMap = new HashMap<>();
 
     public void addWebFunction(HttpType httpType, String requestUri, WebFunction webFunction) {

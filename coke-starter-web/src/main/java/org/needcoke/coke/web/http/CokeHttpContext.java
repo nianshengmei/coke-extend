@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import lombok.Data;
 import org.needcoke.coke.web.core.WebApplicationContext;
 import org.needcoke.coke.web.core.WebFunction;
+import org.needcoke.coke.web.util.IOUtil;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,36 +31,35 @@ public class CokeHttpContext {
     }
 
     public String getUri() {
-        synchronized (CokeHttpContext.class) {
-            return request.getMethod() + " " + request.getRequestURI();
-        }
+        return request.getMethod() + " " + request.getRequestURI();
     }
 
-    public HttpType getHttpType(){
-        synchronized (CokeHttpContext.class) {
-            return HttpType.valueOf(request.getMethod());
-        }
+    public HttpType getHttpType() {
+        return HttpType.valueOf(request.getMethod());
     }
 
-    public WebFunction getWebFunction(){
-        synchronized (CokeHttpContext.class) {
-            return applicationContext.getWebFunction(getUri());
-        }
+    public WebFunction getWebFunction() {
+        return applicationContext.getWebFunction(getUri());
     }
 
 
+    public Map<String, String[]> paramMap() {
+        return request.getParameterMap();
+    }
 
-    public Map<String,String[]> paramMap(){
-        synchronized (CokeHttpContext.class) {
-            return request.getParameterMap();
-        }
+    public String body() throws IOException {
+        return IOUtil.getBody(request);
+    }
+
+    //简单对象得
+    public <T> T fromJson(String jsonString,Class<T> tClass){
+        return gson.fromJson(jsonString,tClass);
     }
 
     public void writeJson(Object o) throws IOException {
-        synchronized (CokeHttpContext.class) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(gson.toJson(o));
-        }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(gson.toJson(o));
+
     }
 }

@@ -34,7 +34,10 @@ public class HttpMainHandler implements CokeHttpHandler {
         String uri = context.getUri();
         if (uri.equals("GET /favicon.ico")) {
             return favicon(context);
-        } else {
+        }  else {
+            {
+                //比较PahVariableMap是否有匹配的上的
+            }
             return uri_500(context);
         }
 

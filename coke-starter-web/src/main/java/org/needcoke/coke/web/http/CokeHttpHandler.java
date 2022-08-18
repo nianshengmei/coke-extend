@@ -13,7 +13,7 @@ public interface CokeHttpHandler {
             complete(context);
 
         } catch (Throwable e) {
-
+            //全局异常处理
         }
     }
 

@@ -5,6 +5,8 @@ import lombok.experimental.Accessors;
 import org.needcoke.coke.web.http.HttpType;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author warren
@@ -19,4 +21,12 @@ public class WebFunction {
     private String invokeBeanName;
 
     private Method invokeMethod;
+
+    private boolean body;
+
+    Map<String,String> defaultValueMap;
+
+    List<String> reqParam;
+
+    List<String> mustReqParam;
 }
