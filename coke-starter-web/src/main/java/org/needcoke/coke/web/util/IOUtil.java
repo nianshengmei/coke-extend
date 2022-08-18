@@ -30,7 +30,7 @@ public class IOUtil {
     }
 
     public String getHttpType(HttpServletRequest request){
-        return "GET";
+        return request.getMethod();
     }
 
 }

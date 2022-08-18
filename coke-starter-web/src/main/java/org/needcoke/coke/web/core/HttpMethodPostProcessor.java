@@ -3,6 +3,7 @@ package org.needcoke.coke.web.core;
 import cn.hutool.core.util.StrUtil;
 import org.needcoke.coke.annotation.Controller;
 import org.needcoke.coke.web.annotation.*;
+import org.needcoke.coke.web.http.HttpType;
 import pers.warren.ioc.core.BeanDefinition;
 import pers.warren.ioc.core.BeanPostProcessor;
 import pers.warren.ioc.core.BeanRegister;

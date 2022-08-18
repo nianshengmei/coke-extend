@@ -2,7 +2,6 @@ package org.needcoke.coke.web.http;
 
 import com.google.gson.Gson;
 import lombok.Data;
-import org.needcoke.coke.web.core.HttpType;
 import org.needcoke.coke.web.core.WebApplicationContext;
 import org.needcoke.coke.web.core.WebFunction;
 
@@ -62,5 +61,4 @@ public class CokeHttpContext {
             response.getWriter().write(gson.toJson(o));
         }
     }
-
 }

@@ -1,6 +1,6 @@
 package org.needcoke.coke.web.core;
 
-import pers.warren.ioc.annotation.Component;
+import org.needcoke.coke.web.http.HttpType;
 import pers.warren.ioc.core.ApplicationContext;
 
 import java.lang.reflect.Method;

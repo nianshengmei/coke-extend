@@ -1,4 +1,4 @@
-package org.needcoke.coke.web.core;
+package org.needcoke.coke.web.http;
 
 /**
  * @author warren

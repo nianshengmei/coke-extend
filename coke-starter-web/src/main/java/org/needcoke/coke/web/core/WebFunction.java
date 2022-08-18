@@ -2,6 +2,7 @@ package org.needcoke.coke.web.core;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.needcoke.coke.web.http.HttpType;
 
 import java.lang.reflect.Method;
 
