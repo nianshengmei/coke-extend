@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.needcoke.coke.web.core;
+package org.needcoke.coke.http;
 
 /**
  * Exceptions thrown by an web server.

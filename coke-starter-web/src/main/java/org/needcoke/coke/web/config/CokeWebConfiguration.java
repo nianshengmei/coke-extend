@@ -1,13 +1,13 @@
 package org.needcoke.coke.web.config;
 
 import lombok.Data;
+import org.needcoke.coke.http.CokeWebConfig;
 import pers.warren.ioc.annotation.Configuration;
 import pers.warren.ioc.annotation.Value;
 
 @Data
 @Configuration
-public class CokeWebConfiguration {
-
+public class CokeWebConfiguration implements CokeWebConfig {
 
     @Value("server.port:8080")
     private int serverPort;

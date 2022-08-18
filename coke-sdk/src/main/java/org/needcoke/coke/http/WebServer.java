@@ -1,4 +1,6 @@
-package org.needcoke.coke.web.core;
+package org.needcoke.coke.http;
+
+import org.apache.catalina.LifecycleException;
 
 public interface WebServer {
 
@@ -14,7 +16,7 @@ public interface WebServer {
      * effect.
      * @throws WebServerException if the server cannot be stopped
      */
-    void stop() throws WebServerException;
+    void stop() throws WebServerException, LifecycleException;
 
     /**
      * Return the port this server is listening on.

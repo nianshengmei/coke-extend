@@ -23,6 +23,10 @@ public class WebApplicationContext extends ApplicationContext {
         return httpFunctionMap.get(httpType.name() + " " + requestUri);
     }
 
+    public WebFunction getWebFunction(String fullUri) {
+        return httpFunctionMap.get(fullUri);
+    }
+
     public void addWebFunction(HttpType httpType, String requestUri, String invokeBeanName, Method invokeMethod) {
         httpFunctionMap.put(httpType.name() + " " + requestUri,
                 new WebFunction()

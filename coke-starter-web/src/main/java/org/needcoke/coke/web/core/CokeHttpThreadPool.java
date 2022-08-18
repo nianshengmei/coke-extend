@@ -9,7 +9,6 @@ package org.needcoke.coke.web.core;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.coke.web.constant.ThreadPoolDefaultValue;
-import pers.warren.ioc.annotation.Autowired;
 import pers.warren.ioc.annotation.Component;
 import pers.warren.ioc.annotation.Value;
 
@@ -21,13 +20,6 @@ public class CokeHttpThreadPool {
 
     public CokeHttpThreadPool() {
         log.info("web thread pool start ok ！core pool size = {},max pool size = {}", iocCoreThreadPoolSize, iocMaximumPoolSize);
-    }
-
-    @Autowired
-    private static CokeHttpThreadPool threadPool;
-
-    public static CokeHttpThreadPool getCoreThreadPool() {
-        return CokeHttpThreadPool.threadPool;
     }
 
     /**
