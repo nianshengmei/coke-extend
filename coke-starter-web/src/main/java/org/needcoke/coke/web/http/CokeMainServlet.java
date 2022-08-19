@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CokeMainServlet extends CokeHttpServlet {
 
-
     private final WebApplicationContext webApplicationContext;
 
     @Override
@@ -30,6 +29,5 @@ public class CokeMainServlet extends CokeHttpServlet {
             httpHandler.run(new CokeHttpContext(req, resp, webApplicationContext));
         }
     }
-
 
 }

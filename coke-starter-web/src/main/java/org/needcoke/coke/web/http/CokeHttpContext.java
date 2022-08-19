@@ -5,8 +5,6 @@ import lombok.Data;
 import org.needcoke.coke.web.core.WebApplicationContext;
 import org.needcoke.coke.web.core.WebFunction;
 import org.needcoke.coke.web.util.IOUtil;
-
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,7 +20,6 @@ public class CokeHttpContext {
     private final WebApplicationContext applicationContext;
 
     private final Gson gson = new Gson();
-
 
     public CokeHttpContext(HttpServletRequest request, HttpServletResponse response, WebApplicationContext applicationContext) {
         this.request = request;
@@ -62,4 +59,7 @@ public class CokeHttpContext {
         response.getWriter().write(gson.toJson(o));
 
     }
+
+
+
 }

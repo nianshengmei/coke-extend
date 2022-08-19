@@ -9,15 +9,21 @@ import org.needcoke.coke.web.util.ParameterUtil;
 import pers.warren.ioc.annotation.Component;
 import pers.warren.ioc.util.ReflectUtil;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.List;
 import java.util.Map;
 
 @Component
 public class HttpMainHandler implements CokeHttpHandler {
+
+    @Resource
+    private WebMvcConfigurationSupport webMvcConfigurationSupport;
+
     @Override
     public int realRun(CokeHttpContext context) throws Exception {
         if (null == context.getWebFunction()) {
@@ -34,7 +40,7 @@ public class HttpMainHandler implements CokeHttpHandler {
         String uri = context.getUri();
         if (uri.equals("GET /favicon.ico")) {
             return favicon(context);
-        }  else {
+        } else {
             {
                 //比较PahVariableMap是否有匹配的上的
             }
@@ -57,7 +63,7 @@ public class HttpMainHandler implements CokeHttpHandler {
         return 0;
     }
 
-    private int uri_500(CokeHttpContext context) throws Exception{
+    private int uri_500(CokeHttpContext context) throws Exception {
         String html = ResourceUtil.readUtf8Str("ERROR-PAGE/" + 500 + ".html");
         html = html.replaceAll("\r", "").replaceAll("\n", "");
         context.getResponse().setContentType("text/html;charset=utf-8");
@@ -81,10 +87,9 @@ public class HttpMainHandler implements CokeHttpHandler {
         return 0;
     }
 
-    private Object[] getParams(CokeHttpContext context,Method method) {
+    private Object[] getParams(CokeHttpContext context, Method method) {
         Parameter[] parameters = method.getParameters();
         Object[] invokeParams = new Object[parameters.length];
-
 
 
         return invokeParams;
@@ -104,16 +109,27 @@ public class HttpMainHandler implements CokeHttpHandler {
         return parameters;
     }
 
-    private String[] getParameterNames(Method method){
+    private String[] getParameterNames(Method method) {
         String[] parameterNames = ReflectUtil.getParameterNames(method);
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
-            if(null != requestParam && StrUtil.isNotEmpty(requestParam.value())){
+            if (null != requestParam && StrUtil.isNotEmpty(requestParam.value())) {
                 parameterNames[i] = requestParam.value();
             }
         }
         return parameterNames;
     }
 
+    @Override
+    public void preRun(CokeHttpContext context) throws Exception {
+        interceptorRun(context);
+    }
+
+    private void interceptorRun(CokeHttpContext context) {
+        List<Interceptor> interceptors = webMvcConfigurationSupport.getInterceptors();
+        for (Interceptor interceptor : interceptors) {
+            interceptor.preHandle(context);
+        }
+    }
 }
