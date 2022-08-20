@@ -18,6 +18,7 @@
         <module>coke-starter-web</module>
         <module>coke-sdk</module>
         <module>coke-starter-tomcat</module>
+        <module>coke-starter-aop</module>
     </modules>
 
     <dependencyManagement>
