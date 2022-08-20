@@ -1,5 +1,7 @@
 package org.needcoke.coke.web.http;
 
+import pers.warren.ioc.core.ApplicationContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,11 +11,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class AbstractHandler implements Handler{
 
-
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response) {
-        handle(new HttpContext(request,response));
+    public void handle(HttpServletRequest request, HttpServletResponse response,ApplicationContext applicationContext) throws Throwable{
+        handle(new HttpContext(request,response),applicationContext);
     }
 
-    public abstract void handle(HttpContext ctx);
+    public abstract void handle(HttpContext ctx, ApplicationContext applicationContext) throws Throwable;
 }

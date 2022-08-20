@@ -1,5 +1,7 @@
 package org.needcoke.coke.web.http;
 
+import pers.warren.ioc.core.ApplicationContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,5 +10,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface Handler {
 
-    void handle(HttpServletRequest request, HttpServletResponse response);
+    //执行方法
+    void handle(HttpServletRequest request, HttpServletResponse response, ApplicationContext applicationContext) throws Throwable;
 }

@@ -20,5 +20,4 @@ public class WebApplicationContext extends ApplicationContext {
     public Handler getHandler(String name){
         return requestMappingHandlerMap.get(name);
     }
-
 }
