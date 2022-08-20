@@ -18,7 +18,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,6 @@ public class HttpMethodPostProcessor implements BeanPostProcessor {
             Controller controllerAnnotation = clz.getAnnotation(Controller.class);
             String[] mappings = controllerAnnotation.mapping();
             Method[] declaredMethods = clz.getDeclaredMethods();
-            TypeVariable<? extends Class<?>>[] typeParameters = clz.getTypeParameters();
             Container container = Container.getContainer();
             WebApplicationContext applicationContext = container.getBean(WebApplicationContext.class);
             for (Method declaredMethod : declaredMethods) {
