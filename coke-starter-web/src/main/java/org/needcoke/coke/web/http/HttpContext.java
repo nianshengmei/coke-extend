@@ -24,7 +24,7 @@ public class HttpContext {
 
     private HttpServletResponse httpServletResponse;
 
-    public Map<String, String[]> paramMap() {
+    public Map<String, String[]> getParamMap() {
         return httpServletRequest.getParameterMap();
     }
 

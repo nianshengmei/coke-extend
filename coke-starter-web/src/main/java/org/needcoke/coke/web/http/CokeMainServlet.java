@@ -22,9 +22,15 @@ public class CokeMainServlet extends CokeHttpServlet {
 
     private final WebApplicationContext applicationContext;
 
+    private List<HandlerMapping> handlerMappingList;
+
+    public void autowiredHandlerMappingList(){
+        handlerMappingList = applicationContext.getBeans(HandlerMapping.class);
+    }
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<HandlerMapping> handlerMappingList = applicationContext.getBeans(HandlerMapping.class);
+        if(null == handlerMappingList) autowiredHandlerMappingList();
         for (HandlerMapping handlerMapping : handlerMappingList) {
             handlerMapping.mapping(req,resp);
         }

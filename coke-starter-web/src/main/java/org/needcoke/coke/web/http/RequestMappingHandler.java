@@ -32,12 +32,12 @@ public class RequestMappingHandler extends AbstractHandler{
 
     @Override
     public void handle(HttpContext ctx, ApplicationContext applicationContext) throws Throwable{
-        Object bean = applicationContext.getBean(invokeBeanName);
-        Class<?>[] parameterTypes = invokeMethod.getParameterTypes();
-        String[] parameterNames = getParameterNames(invokeMethod);
-        Map<String, String[]> paramMap = ctx.paramMap();
-        Object[] parameters = getParams(parameterTypes, parameterNames, paramMap);
-        Object result = invokeMethod.invoke(bean, parameters);
+//        Object bean = applicationContext.getBean(invokeBeanName);
+//        Class<?>[] parameterTypes = invokeMethod.getParameterTypes();
+//        String[] parameterNames = getParameterNames(invokeMethod);
+//        Map<String, String[]> paramMap = ctx.paramMap();
+//        Object[] parameters = getParams(parameterTypes, parameterNames, paramMap);
+        Object result = invokeMethod.invoke(getBean(applicationContext), getParameters(ctx));
         ctx.writeJson(result);
     }
 
@@ -56,7 +56,7 @@ public class RequestMappingHandler extends AbstractHandler{
         return parameters;
     }
 
-    private String[] getParameterNames(Method method){
+    protected String[] getParameterNames(Method method){
         String[] parameterNames = ReflectUtil.getParameterNames(method);
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
@@ -68,5 +68,14 @@ public class RequestMappingHandler extends AbstractHandler{
         return parameterNames;
     }
 
+    public Object getBean(ApplicationContext applicationContext){
+        return applicationContext.getBean(invokeBeanName);
+    }
 
+    public Object[] getParameters(HttpContext ctx){
+        Class<?>[] parameterTypes = invokeMethod.getParameterTypes();
+        String[] parameterNames = getParameterNames(invokeMethod);
+        Map<String, String[]> paramMap = ctx.getParamMap();
+        return getParams(parameterTypes, parameterNames, paramMap);
+    }
 }
