@@ -1,4 +1,4 @@
-package org.needcoke.coke.web.config;
+package org.needcoke.coke.web.core;
 
 import lombok.RequiredArgsConstructor;
 import org.needcoke.coke.http.WebServer;
