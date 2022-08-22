@@ -1,10 +1,12 @@
 package org.needcoke.coke.web.core;
 
-import org.needcoke.coke.web.http.HttpType;
+import org.needcoke.coke.web.http.Handler;
+import org.needcoke.coke.web.http.PathVariableRequestMappingHandler;
 import pers.warren.ioc.core.ApplicationContext;
 
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,34 +14,24 @@ import java.util.Map;
  */
 public class WebApplicationContext extends ApplicationContext {
 
+    private final Map<String, Handler> requestMappingHandlerMap = new HashMap<>();
 
-    private final Map<String, WebFunction> httpFunctionMap = new HashMap<>();
+    private final List<PathVariableRequestMappingHandler> pathVariableRequestMappingHandlerList = new ArrayList<>();
 
-    //  GET user/get/{id}  ->id
-    private final Map<String, String> pathVariableFunctionMap = new HashMap<>();
-
-    public void addWebFunction(HttpType httpType, String requestUri, WebFunction webFunction) {
-        httpFunctionMap.put(httpType.name() + " " + requestUri, webFunction);
-    }
-
-    public WebFunction getWebFunction(HttpType httpType, String requestUri) {
-        return httpFunctionMap.get(httpType.name() + " " + requestUri);
-    }
-
-    public WebFunction getWebFunction(String fullUri) {
-        return httpFunctionMap.get(fullUri);
-    }
-
-    public void addWebFunction(HttpType httpType, String requestUri, String invokeBeanName, Method invokeMethod) {
-        String scanUri = httpType.name() + " " + requestUri;
-        httpFunctionMap.put(scanUri,
-                new WebFunction()
-                        .setHttpType(httpType)
-                        .setInvokeBeanName(invokeBeanName)
-                        .setInvokeMethod(invokeMethod)
-        );
-        if (scanUri.contains("{") && scanUri.contains("}")) {
-
+    public void putHandler(String name ,Handler handler){
+        if(handler instanceof PathVariableRequestMappingHandler){
+            pathVariableRequestMappingHandlerList.add((PathVariableRequestMappingHandler) handler);
+            return;
         }
+        requestMappingHandlerMap.put(name,handler);
+    }
+
+    public Handler getHandler(String name){
+        return requestMappingHandlerMap.get(name);
+    }
+
+
+    public List<PathVariableRequestMappingHandler> getPathVariableRequestMappingHandlerList(){
+        return pathVariableRequestMappingHandlerList;
     }
 }

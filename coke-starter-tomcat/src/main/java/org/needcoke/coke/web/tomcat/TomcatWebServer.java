@@ -31,12 +31,11 @@ public class TomcatWebServer implements WebServer {
         try {
             initialize();
             tomcat.start();
+            log.info("Tomcat initialized with port(s): " + getPort());
         }catch (Exception e){
             throw new WebServerException("Unable to start embedded Tomcat", e);
         }
-        new Thread(()->{
-            tomcat.getServer().await();
-        }).start();
+        new Thread(()-> tomcat.getServer().await()).start();
     }
 
     @Override
@@ -75,7 +74,7 @@ public class TomcatWebServer implements WebServer {
         //**************session time setting end*****************
         context.setAllowCasualMultipartParsing(true);
         tomcat.getConnector();
-        log.info("Tomcat initialized with port(s): " + webConfiguration.getServerPort());
+
     }
 
     protected Context stepContext(){

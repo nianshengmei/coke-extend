@@ -3,7 +3,7 @@ package org.needcoke.coke.web.http;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.coke.http.CokeHttpServlet;
-import org.needcoke.coke.web.core.*;
+import org.needcoke.coke.web.core.WebApplicationContext;
 import pers.warren.ioc.annotation.Component;
 
 import javax.servlet.ServletException;
@@ -20,14 +20,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CokeMainServlet extends CokeHttpServlet {
 
-    private final WebApplicationContext webApplicationContext;
+    private final WebApplicationContext applicationContext;
+
+    private List<HandlerMapping> handlerMappingList;
+
+    public void autowiredHandlerMappingList(){
+        handlerMappingList = applicationContext.getBeans(HandlerMapping.class);
+    }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CokeHttpHandler httpHandler = webApplicationContext.getBean(CokeHttpHandler.class);
-        if (null != httpHandler) {
-            httpHandler.run(new CokeHttpContext(req, resp, webApplicationContext));
+        if(null == handlerMappingList) autowiredHandlerMappingList();
+        for (HandlerMapping handlerMapping : handlerMappingList) {
+            handlerMapping.mapping(req,resp);
         }
     }
+
 
 }

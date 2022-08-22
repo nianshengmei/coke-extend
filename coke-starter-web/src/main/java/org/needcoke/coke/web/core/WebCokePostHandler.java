@@ -7,14 +7,11 @@ import pers.warren.ioc.handler.CokePostHandler;
 
 @Component
 @RequiredArgsConstructor
-public class WebCokePostHandler implements CokePostHandler{
+public class WebCokePostHandler implements CokePostHandler {
 
     private final WebServer webServer;
-
     @Override
     public void run() {
-       webServer.start();
+        webServer.start();
     }
-
-
 }
