@@ -19,12 +19,27 @@
     <dependencies>
         <dependency>
             <groupId>org.needcoke</groupId>
+            <artifactId>coke-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.needcoke</groupId>
             <artifactId>coke</artifactId>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
