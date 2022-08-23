@@ -21,7 +21,9 @@ import java.lang.reflect.Constructor;
 /**
  * Description of an invocation to a constructor, given to an
  * interceptor upon constructor-call.
+ *构造函数调用的描述，在构造函数调用时提供给拦截器。
  *
+ * 构造函数调用是一个连接点，可以被构造函数拦截器拦截。
  * <p>A constructor invocation is a joinpoint and can be intercepted
  * by a constructor interceptor.
  *
@@ -30,12 +32,15 @@ import java.lang.reflect.Constructor;
  */
 public interface ConstructorInvocation extends Invocation {
 
-	/**
-	 * Get the constructor being called.
-	 * <p>This method is a friendly implementation of the
-	 * {@link Joinpoint#getStaticPart()} method (same result).
-	 * @return the constructor being called
-	 */
-	Constructor<?> getConstructor();
+    /**
+     * Get the constructor being called.
+     * <p>
+     * 获取正在调用的构造函数
+     * <p>This method is a friendly implementation of the
+     * {@link Joinpoint#getStaticPart()} method (same result).
+     *
+     * @return the constructor being called
+     */
+    Constructor<?> getConstructor();
 
 }

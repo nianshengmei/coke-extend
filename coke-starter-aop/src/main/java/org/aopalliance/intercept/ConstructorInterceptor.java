@@ -41,19 +41,23 @@ package org.aopalliance.intercept;
  *
  * @author Rod Johnson
  */
-public interface ConstructorInterceptor extends Interceptor  {
+public interface ConstructorInterceptor extends Interceptor {
 
-	/**
-	 * Implement this method to perform extra treatments before and
-	 * after the construction of a new object. Polite implementations
-	 * would certainly like to invoke {@link Joinpoint#proceed()}.
-	 * @param invocation the construction joinpoint
-	 * @return the newly created object, which is also the result of
-	 * the call to {@link Joinpoint#proceed()}; might be replaced by
-	 * the interceptor
-	 * @throws Throwable if the interceptors or the target object
-	 * throws an exception
-	 */
-	Object construct(ConstructorInvocation invocation) throws Throwable;
+    /**
+     * Implement this method to perform extra treatments before and
+     * after the construction of a new object. Polite implementations
+     * would certainly like to invoke {@link Joinpoint#proceed()}.
+     *
+     * <p>
+     * 实现此方法以在构建新对象之前和之后执行额外处理。礼貌的实现当然希望调用Joinpoint.procedure（）。
+     *
+     * @param invocation the construction joinpoint
+     * @return the newly created object, which is also the result of
+     * the call to {@link Joinpoint#proceed()}; might be replaced by
+     * the interceptor
+     * @throws Throwable if the interceptors or the target object
+     *                   throws an exception
+     */
+    Object construct(ConstructorInvocation invocation) throws Throwable;
 
 }
