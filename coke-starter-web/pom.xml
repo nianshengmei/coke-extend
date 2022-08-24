@@ -48,6 +48,11 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-servlet-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.needcoke</groupId>
+            <artifactId>coke-starter-aop</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

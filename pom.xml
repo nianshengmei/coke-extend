@@ -117,6 +117,12 @@
                 <artifactId>aopalliance</artifactId>
                 <version>1.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.needcoke</groupId>
+                <artifactId>coke-starter-aop</artifactId>
+                <version>1.0.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
