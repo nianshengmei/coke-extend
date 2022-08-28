@@ -79,7 +79,7 @@ public class HttpMethodPostProcessor implements BeanPostProcessor {
                                 key = paramAnnotations.get(0).getParameterName();
                             }
                             for (String mapping : mappings) {
-                                applicationContext.putHandler(HttpType.POST.name() + " " + getMapping(mapping,value),newHandler(HttpType.GET,beanDefinition.getName(),declaredMethod,pathVariableValue,key,getMapping(mapping,value)));
+                                applicationContext.putHandler(HttpType.POST.name() + " " + getMapping(mapping,value),newHandler(HttpType.POST,beanDefinition.getName(),declaredMethod,pathVariableValue,key,getMapping(mapping,value)));
                             }
                         }
                     }
@@ -90,7 +90,7 @@ public class HttpMethodPostProcessor implements BeanPostProcessor {
                             String value = putAnnotation.value();
                             for (String mapping : mappings) {
                                 applicationContext.putHandler(HttpType.PUT.name() + " " + getMapping(mapping,value)
-                                        ,newHandler(HttpType.GET,beanDefinition.getName(),declaredMethod,null,null,null));
+                                        ,newHandler(HttpType.PUT,beanDefinition.getName(),declaredMethod,null,null,null));
                             }
                         }
                     }
@@ -101,7 +101,7 @@ public class HttpMethodPostProcessor implements BeanPostProcessor {
                             String value = deleteAnnotation.value();
                             for (String mapping : mappings) {
                                 applicationContext.putHandler(HttpType.DELETE.name() + " " + getMapping(mapping,value)
-                                        ,newHandler(HttpType.GET,beanDefinition.getName(),declaredMethod,null,null,null));
+                                        ,newHandler(HttpType.DELETE,beanDefinition.getName(),declaredMethod,null,null,null));
                             }
                         }
                     }
@@ -112,7 +112,7 @@ public class HttpMethodPostProcessor implements BeanPostProcessor {
                             String value = patchAnnotation.value();
                             for (String mapping : mappings) {
                                 applicationContext.putHandler(HttpType.PATCH.name() + " " + getMapping(mapping,value)
-                                        ,newHandler(HttpType.GET,beanDefinition.getName(),declaredMethod,null,null,null));
+                                        ,newHandler(HttpType.PATCH,beanDefinition.getName(),declaredMethod,null,null,null));
                             }
                         }
                     }
