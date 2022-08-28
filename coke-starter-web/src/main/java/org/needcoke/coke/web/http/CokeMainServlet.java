@@ -26,24 +26,19 @@ public class CokeMainServlet extends CokeHttpServlet {
 
     private List<HandlerMapping> handlerMappingList;
 
-    public void autowiredHandlerMappingList(HttpServletRequest request){
-        String requestUri = getRequestUri(request);
+    public void autowiredHandlerMappingList(){
         handlerMappingList = applicationContext.getBeans(HandlerMapping.class);
         handlerMappingList.sort(Comparator.comparingInt(Order::getOrder));
     }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(null == handlerMappingList) autowiredHandlerMappingList(req);
+        if(null == handlerMappingList) autowiredHandlerMappingList();
         for (HandlerMapping handlerMapping : handlerMappingList) {
             if (handlerMapping.mapping(req,resp)) {
                 break;
             }
         }
-    }
-
-    protected String getRequestUri(HttpServletRequest request){
-        return request.getMethod()+" "+request.getRequestURI();
     }
 
 }
