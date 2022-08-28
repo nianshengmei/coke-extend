@@ -1,7 +1,7 @@
 package org.needcoke.aop.proxy;
 
 import org.aopalliance.aop.Advice;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.Pointcut;
 
 /**
  * 切面
