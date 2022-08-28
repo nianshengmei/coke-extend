@@ -1,6 +1,8 @@
 package org.needcoke.aop.core;
 
 import cn.hutool.core.collection.CollUtil;
+import org.needcoke.aop.proxy.Aspect;
+import org.needcoke.aop.proxy.ProxyConfig;
 import pers.warren.ioc.core.ApplicationContext;
 
 import java.util.HashMap;
@@ -30,6 +32,30 @@ public class ProxyApplicationContext extends ApplicationContext {
      * key: 代理对象名称
      */
     private final Map<String, Object> proxyBeanMap = new HashMap<>();
+
+    /**
+     * 打了@Aspect注解的bean对象名称
+     */
+    private final Map<String, Aspect> aspectMap = new HashMap<>();
+
+    /**
+     * 存代理类配置
+     *
+     * @param name        @Aspect注解的bean的名称
+     * @param aspect 代理配置
+     */
+    public void putAspect(String name, Aspect aspect) {
+        aspectMap.put(name, aspect);
+    }
+
+    /**
+     * 取代理类配置
+     *
+     * @param name @Aspect注解的bean的名称
+     */
+    public Aspect getAspect(String name) {
+        return aspectMap.get(name);
+    }
 
     /**
      * 是否需要代理

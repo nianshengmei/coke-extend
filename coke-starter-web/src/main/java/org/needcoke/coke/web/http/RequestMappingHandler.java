@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.EqualsAndHashCode;
@@ -16,7 +14,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.needcoke.coke.web.annotation.PathVariable;
 import org.needcoke.coke.web.annotation.RequestBody;
 import org.needcoke.coke.web.annotation.RequestParam;
 import org.needcoke.coke.web.bean.RequestParamItem;
@@ -50,6 +47,9 @@ public class RequestMappingHandler extends AbstractHandler {
 
     private Class bodyClz;
 
+    private Class[] innerTypes;
+
+
     private int bodyIndex = -1;
 
     @Setter
@@ -76,27 +76,37 @@ public class RequestMappingHandler extends AbstractHandler {
                 parameters[i] = dstValue;
             }
         }
-        if (null == paramItemArr || paramItemArr.length == 0) {
-            return parameters;
-        }
-        for (int i = 0; i < paramItemArr.length; i++) {
-            if (null == paramItemArr[i]) {
-                continue;
-            }
-            int paramIndex = paramItemArr[i].getParamIndex();
-            if(-1 == paramIndex) continue;
-            if (parameters[paramIndex] == null) {
-                parameters[paramIndex] = paramItemArr[i].getDefaultValue();
-                if (paramItemArr[i].isRequired() && parameters[paramIndex] == null) {
-                    throw new RuntimeException("bean "+invokeBeanName +" 's method "+invokeMethod.getName() +" 's parameter "+ paramItemArr[i].getName() +" must have !");
+        if (null != paramItemArr && paramItemArr.length > 0) {
+
+            for (int i = 0; i < paramItemArr.length; i++) {
+                if (null == paramItemArr[i]) {
+                    continue;
+                }
+                int paramIndex = paramItemArr[i].getParamIndex();
+                if (-1 == paramIndex) continue;
+                if (parameters[paramIndex] == null) {
+                    parameters[paramIndex] = paramItemArr[i].getDefaultValue();
+                    if (paramItemArr[i].isRequired() && parameters[paramIndex] == null) {
+                        throw new RuntimeException("bean " + invokeBeanName + " 's method " + invokeMethod.getName() + " 's parameter " + paramItemArr[i].getName() + " must have !");
+                    }
                 }
             }
         }
-        if(-1 != bodyIndex && null == parameters[bodyIndex]) {
+        if (-1 != bodyIndex && null == parameters[bodyIndex]) {
+            String body = "";
             try {
-                parameters[bodyIndex] = JSONUtil.toBean(ctx.body(), bodyClz);
-            }catch (Exception e){
-                throw new RuntimeException("body parse error bean "+invokeBeanName +" 's method "+invokeMethod.getName() +" 's parameter "+bodyName,e);
+                body = ctx.body();
+                parameters[bodyIndex] = JSONUtil.toBean(body,bodyClz);
+            } catch (Exception e) {
+                try {
+                    if(bodyClz.isAssignableFrom(List.class)){
+                        System.out.println(body);
+                    }
+                    parameters[bodyIndex] = JSONUtil.toList(body, Object.class);
+                } catch (Exception a) {
+                    throw new RuntimeException("body parse error bean " + invokeBeanName + " 's method " + invokeMethod.getName() + " 's parameter " + bodyName, a);
+
+                }
             }
         }
         return parameters;
@@ -158,14 +168,14 @@ public class RequestMappingHandler extends AbstractHandler {
         for (int i = 0; i < requestParamList.size(); i++) {
             Parameter parameter = requestParamList.get(i);
             RequestParam annotation = parameter.getAnnotation(RequestParam.class);
-            if (null == annotation) return;
+//            if (null == annotation) return;
             this.paramItemArr[i] = new RequestParamItem()
                     .setParamIndex(i)
                     .setName(mp.get(parameter))
                     .setRequestParamName(null == annotation ? null : annotation.value())
                     .setRequired(null != annotation && annotation.required())
                     .setRequestParam(null != annotation)
-                    .setDefaultValue(null == annotation ? null : ParameterUtil.getDstValue(annotation.defaultValue(), parameter.getType()));
+                    .setDefaultValue(null == annotation || StrUtil.isEmpty(annotation.defaultValue()) ? null : ParameterUtil.getDstValue(annotation.defaultValue(), parameter.getType()));
         }
     }
 
