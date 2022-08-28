@@ -39,6 +39,7 @@ public class PathVariableRequestMappingHandler extends RequestMappingHandler {
 
     @Override
     public void handle(HttpContext ctx, ApplicationContext applicationContext) throws Throwable {
+        setCtx(ctx);
         Object[] parameters = getParameters(ctx);
         String[] parameterNames = getParameterNames(getInvokeMethod());
         Class<?>[] parameterTypes = getInvokeMethod().getParameterTypes();
@@ -50,4 +51,6 @@ public class PathVariableRequestMappingHandler extends RequestMappingHandler {
         Object result = getInvokeMethod().invoke(getBean(applicationContext), parameters);
         ctx.writeJson(result);
     }
+
+
 }

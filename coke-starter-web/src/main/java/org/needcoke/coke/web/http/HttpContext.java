@@ -35,7 +35,11 @@ public class HttpContext {
     public void writeJson(Object o) throws IOException {
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
-        httpServletResponse.getWriter().write(JSONUtil.toJsonStr(o));
-
+        if(null == o){
+            httpServletResponse.getWriter().flush();
+        }else
+        {
+            httpServletResponse.getWriter().write(JSONUtil.toJsonStr(o));
+        }
     }
 }
