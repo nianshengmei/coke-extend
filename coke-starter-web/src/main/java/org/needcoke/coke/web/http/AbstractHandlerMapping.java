@@ -7,17 +7,24 @@ import javax.servlet.http.HttpServletResponse;
  * @author warren
  * @date 2022/4/2
  */
-public abstract class AbstractHandlerMapping implements HandlerMapping{
+public abstract class AbstractHandlerMapping implements HandlerMapping {
 
     @Override
-    public void mapping(HttpServletRequest request, HttpServletResponse response) {
+    public boolean mapping(HttpServletRequest request, HttpServletResponse response) {
         Handler handler = getHandler(request, response);
         if(null != handler){
             getHandlerAdapter().handle(request,response,handler);
+            return true;
         }
+        return false;
     }
 
     protected String getRequestUri(HttpServletRequest request){
         return request.getMethod()+" "+request.getRequestURI();
+    }
+
+    @Override
+    public int getOrder() {
+        return 5;
     }
 }

@@ -30,4 +30,9 @@ public class RequestMappingHandlerMapping extends AbstractHandlerMapping{
     public HandlerAdapter getHandlerAdapter() {
         return handlerAdapter;
     }
+
+    @Override
+    public int getOrder() {
+        return 0;
+    }
 }

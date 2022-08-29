@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * @author warren
  */
-@Component
 @Slf4j
+@Component
 public class PathVariableHandlerMapping extends AbstractHandlerMapping{
     @Resource
     private HandlerAdapter handlerAdapter;
@@ -36,8 +36,15 @@ public class PathVariableHandlerMapping extends AbstractHandlerMapping{
         return null;
     }
 
+
+
     @Override
     public HandlerAdapter getHandlerAdapter() {
         return handlerAdapter;
+    }
+
+    @Override
+    public int getOrder() {
+        return 1;
     }
 }
