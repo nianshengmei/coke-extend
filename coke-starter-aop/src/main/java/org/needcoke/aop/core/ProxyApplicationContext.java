@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 代理容器上下文
@@ -55,6 +56,10 @@ public class ProxyApplicationContext extends ApplicationContext {
      */
     public Aspect getAspect(String name) {
         return aspectMap.get(name);
+    }
+
+    public Stream<Aspect> getAspectStream(){
+        return aspectMap.values().stream();
     }
 
     /**

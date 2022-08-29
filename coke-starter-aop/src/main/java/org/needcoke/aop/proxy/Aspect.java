@@ -1,7 +1,6 @@
 package org.needcoke.aop.proxy;
 
 import org.aopalliance.aop.Advice;
-import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * 切面
@@ -32,7 +31,7 @@ public interface Aspect {
 
     /**
      * 后置异常通知
-     */    
+     */
     Advice getAfterThrowingAdvice();
 
     /**
@@ -40,23 +39,27 @@ public interface Aspect {
      */
     Pointcut getPointcut();
 
-    static Aspect createAspect(){
+    static Aspect createAspect() {
         return new DefaultAnnotationAspect();
     }
 
 
-    void setAspectBean(Object aspectBean) ;
+    void setAspectBean(Object aspectBean);
 
-    void setBeforeAdvice(Advice beforeAdvice) ;
+    void setBeforeAdvice(Advice beforeAdvice);
 
-    void setAroundAdvice(Advice aroundAdvice) ;
+    void setAroundAdvice(Advice aroundAdvice);
 
-    void setAfterAdvice(Advice afterAdvice) ;
+    void setAfterAdvice(Advice afterAdvice);
 
-    void setAfterReturningAdvice(Advice afterReturningAdvice) ;
+    void setAfterReturningAdvice(Advice afterReturningAdvice);
 
-    void setAfterThrowingAdvice(Advice afterThrowingAdvice) ;
+    void setAfterThrowingAdvice(Advice afterThrowingAdvice);
 
-    void setPointcut(org.aspectj.lang.reflect.Pointcut pointcut);
+    void setPointcut(Pointcut pointcut);
+
+
+    void initAspect(Class<?> clz);
+
 
 }

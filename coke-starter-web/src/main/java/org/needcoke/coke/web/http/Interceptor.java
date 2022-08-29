@@ -10,12 +10,12 @@ public interface Interceptor {
     /**
      * 前置拦截
      */
-    boolean preHandle(CokeHttpContext context);
+    boolean preHandle(HttpContext context);
 
     /**
      * 后置拦截
      */
-    void afterCompletion(CokeHttpContext context);
+    void afterCompletion(HttpContext context);
 
 
 }

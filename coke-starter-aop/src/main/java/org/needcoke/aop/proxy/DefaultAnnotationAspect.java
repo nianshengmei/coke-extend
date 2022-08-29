@@ -2,13 +2,16 @@ package org.needcoke.aop.proxy;
 
 import lombok.Data;
 import org.aopalliance.aop.Advice;
-import org.aspectj.lang.reflect.Pointcut;
+import org.aspectj.lang.annotation.*;
+import org.needcoke.aop.proxy.advice.*;
+
+import java.lang.reflect.Method;
 
 /**
  * 默认的注解切面
  */
 @Data
-public class DefaultAnnotationAspect implements Aspect{
+public class DefaultAnnotationAspect implements Aspect {
 
     /**
      * 源bean
@@ -46,5 +49,51 @@ public class DefaultAnnotationAspect implements Aspect{
     private Pointcut pointcut;
 
 
+    @Override
+    public void initAspect(Class<?> clz) {
+        Method[] methods = clz.getDeclaredMethods();
+        for (Method method : methods) {
+            Before before = method.getAnnotation(Before.class);
+            Around around = method.getAnnotation(Around.class);
+            After after = method.getAnnotation(After.class);
+            AfterReturning afterReturning = method.getAnnotation(AfterReturning.class);
+            AfterThrowing afterThrowing = method.getAnnotation(AfterThrowing.class);
+            org.aspectj.lang.annotation.Pointcut pc = method.getAnnotation(org.aspectj.lang.annotation.Pointcut.class);
+            if (null != before) {
+                setBeforeAdvice(new DefaultAnnotationBeforeAdvice()
+                        .setExpression(before.value()).setMethod(method)
+                );
+            }
+
+            if (null != around) {
+                setAroundAdvice(new DefaultAnnotationAroundAdvice()
+                        .setExpression(around.value()).setMethod(method)
+                );
+            }
+            if (null != after) {
+                setAfterAdvice(new DefaultAnnotationAfterAdvice()
+                        .setExpression(after.value()).setMethod(method)
+                );
+            }
+
+            if (null != afterReturning) {
+                setAfterReturningAdvice(new DefaultAnnotationAfterReturningAdvice()
+                        .setExpression(afterReturning.value()).setMethod(method)
+                );
+            }
+
+            if (null != afterThrowing) {
+                setAfterThrowingAdvice(new DefaultAnnotationAfterThrowingAdvice()
+                        .setExpression(afterThrowing.value()).setMethod(method)
+                );
+            }
+
+            if(null != pc){
+                setPointcut(new DefaultAnnotationPointcut()
+                        .setExpression(pc.value()).setMethod(method)
+                );
+            }
+        }
+    }
 
 }
