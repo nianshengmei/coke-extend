@@ -6,6 +6,9 @@ import lombok.experimental.Accessors;
 import org.aspectj.weaver.tools.PointcutExpression;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Accessors(chain = true)
 public class DefaultAnnotationPointcut implements Pointcut {
@@ -16,6 +19,9 @@ public class DefaultAnnotationPointcut implements Pointcut {
     @Getter
     private String expression;
 
+    /**
+     * AspectJ切点表达式
+     */
     private PointcutExpression pointcutExpression;
 
     /**
@@ -24,6 +30,8 @@ public class DefaultAnnotationPointcut implements Pointcut {
     @Getter
     @Setter
     private Method method;
+
+    private final List<ProxyConfig> proxyMethodList = new ArrayList<>();
 
 
     public PointcutExpression getPointcutExpression() {
@@ -34,5 +42,10 @@ public class DefaultAnnotationPointcut implements Pointcut {
         this.expression = expression;
         this.pointcutExpression = new AspectJExpressionPointcut().buildPointcutExpression(expression,Thread.currentThread().getContextClassLoader());
         return this;
+    }
+
+    @Override
+    public Collection<ProxyConfig> getProxyConfigList() {
+        return this.proxyMethodList;
     }
 }
