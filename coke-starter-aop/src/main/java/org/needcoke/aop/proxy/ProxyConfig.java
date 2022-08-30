@@ -1,6 +1,9 @@
 package org.needcoke.aop.proxy;
 
 import lombok.Data;
+import org.aopalliance.aop.Advice;
+import org.needcoke.aop.core.DefaultAopProxyFactory;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,6 +21,33 @@ public class ProxyConfig implements Serializable {
      * bean名称
      */
     private String beanName;
+
+    /**
+     * 前置通知
+     */
+    private Advice beforeAdvice;
+
+    /**
+     * 环绕通知
+     */
+    private Advice aroundAdvice;
+
+    /**
+     * 后置通知
+     */
+    private Advice afterAdvice;
+
+    /**
+     * 后置返回通知
+     */
+    private Advice afterReturningAdvice;
+
+    /**
+     * 后置异常通知
+     */
+    private Advice afterThrowingAdvice;
+
+
 
     /**
      * 被切到的方法集合
@@ -44,5 +74,16 @@ public class ProxyConfig implements Serializable {
      */
     public void addMethod(Method method) {
         this.methodCollection.add(method);
+    }
+
+    public boolean contains(Method method) {
+        DefaultAopProxyFactory.MethodInfo methodInfo = DefaultAopProxyFactory.MethodInfo.info(method);
+        for (Method m : methodCollection) {
+            DefaultAopProxyFactory.MethodInfo info = DefaultAopProxyFactory.MethodInfo.info(m);
+            if (methodInfo.equals(info)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

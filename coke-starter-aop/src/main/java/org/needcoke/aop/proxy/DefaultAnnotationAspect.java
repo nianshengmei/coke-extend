@@ -96,4 +96,12 @@ public class DefaultAnnotationAspect implements Aspect {
         }
     }
 
+    @Override
+    public void copy(ProxyConfig config) {
+        config.setAfterAdvice(this.getAfterAdvice());
+        config.setAroundAdvice(this.getAroundAdvice());
+        config.setAfterReturningAdvice(this.getAfterReturningAdvice());
+        config.setAfterThrowingAdvice(this.getAfterThrowingAdvice());
+        config.setBeforeAdvice(this.getBeforeAdvice());
+    }
 }

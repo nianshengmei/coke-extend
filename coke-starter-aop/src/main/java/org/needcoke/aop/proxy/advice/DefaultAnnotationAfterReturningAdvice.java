@@ -20,8 +20,8 @@ public class DefaultAnnotationAfterReturningAdvice implements AfterReturningAdvi
     private Method method;
 
 
-    @Override
-    public void afterReturning(Object returnValue, Method method, Object[] args, Object target) throws Throwable {
-
+    public void invoke(Object returnValue, Method method, Object[] args, Object target) throws Throwable {
+        returnValue = method.invoke(target,args);
     }
+
 }
