@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import org.needcoke.aop.proxy.Aspect;
 import pers.warren.ioc.core.ApplicationContext;
 import pers.warren.ioc.core.BeanDefinition;
+import pers.warren.ioc.core.PreLoad;
 
 import java.util.HashMap;
 import java.util.List;
@@ -114,18 +115,5 @@ public class ProxyApplicationContext extends ApplicationContext {
 
     public void putProxyBean(String name, Object bean) {
         proxyBeanMap.put(name, bean);
-    }
-
-    /**
-     * 提供预先加载的基础组件
-     */
-    @Override
-    public Class<?>[] preloadBasicComponentClass() {
-        return new Class[]{AopProxyFactory.class};
-    }
-
-    @Override
-    public Class<?>[]preloadBasicComponentAnnotationClass() {
-        return new Class[]{Aspect.class};
     }
 }

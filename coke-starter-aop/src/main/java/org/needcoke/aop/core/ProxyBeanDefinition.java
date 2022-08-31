@@ -8,8 +8,13 @@ import pers.warren.ioc.core.BeanDefinition;
 @EqualsAndHashCode(callSuper = true)
 public class ProxyBeanDefinition extends BeanDefinition {
 
+
+
     /**
      * 原始beanDefinition的名称
      */
     protected String parentName;
+
+
+
 }
