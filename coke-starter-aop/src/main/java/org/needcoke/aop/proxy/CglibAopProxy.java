@@ -8,16 +8,10 @@ import lombok.extern.slf4j.Slf4j;
  * @author warren
  */
 @Slf4j
-public class CglibAopProxy implements AopProxy {
+public class CglibAopProxy extends AbstractAopProxy {
 
-    private final Object bean;
-
-    private final ProxyConfig proxyConfig;
-
-    public CglibAopProxy(Object bean, ProxyConfig proxyConfig) {
-        this.bean = bean;
-        this.proxyConfig = proxyConfig;
-
+    public CglibAopProxy(Class<?> sourceBeanClz, String sourceBeanName, ProxyConfig proxyConfig) {
+        super(sourceBeanClz, sourceBeanName, proxyConfig);
         log.info("cglib 动态代理  {}",proxyConfig.getBeanName());
     }
 

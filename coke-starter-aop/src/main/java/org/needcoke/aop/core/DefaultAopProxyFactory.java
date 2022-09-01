@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.needcoke.aop.proxy.*;
+import pers.warren.ioc.core.BeanDefinition;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -16,15 +17,11 @@ public class DefaultAopProxyFactory implements AopProxyFactory {
     @Override
     public AopProxy createAopProxy(ProxyConfig config) throws AopConfigException {
         String beanName = config.getBeanName();
-        Object bean = applicationContext.getBean(beanName);
-        Object proxyBean = applicationContext.getProxyBean(beanName);
-        if (null == proxyBean) {
-            proxyBean = bean;
-        }
-        if (isJdkProxy(bean.getClass(), config)) {
-            return new JdkDynamicAopProxy(proxyBean, config);
+        BeanDefinition beanDefinition = applicationContext.getBeanDefinition(beanName);
+        if (isJdkProxy(beanDefinition.getClz(), config)) {
+            return new JdkDynamicAopProxy(beanDefinition.getClz(), beanName, config);
         } else {
-            return new CglibAopProxy(proxyBean, config);
+            return new CglibAopProxy(beanDefinition.getClz(), beanName, config);
         }
     }
 
