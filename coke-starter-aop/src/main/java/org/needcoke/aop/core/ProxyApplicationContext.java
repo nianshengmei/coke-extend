@@ -1,15 +1,10 @@
 package org.needcoke.aop.core;
 
-import cn.hutool.core.collection.CollUtil;
 import org.needcoke.aop.proxy.Aspect;
 import pers.warren.ioc.core.ApplicationContext;
 import pers.warren.ioc.core.BeanDefinition;
-import pers.warren.ioc.core.PreLoad;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -77,7 +72,6 @@ public class ProxyApplicationContext extends ApplicationContext {
      *
      * @param name 非代理对象的名称
      */
-    @Override
     public <T> T getProxyBean(String name) {
         BeanDefinition beanDefinition = getBeanDefinition(name);
         if(beanDefinition.isProxy()) {
@@ -86,32 +80,6 @@ public class ProxyApplicationContext extends ApplicationContext {
         return getBean(name);
     }
 
-    /**
-     * 获取代理bean对象
-     *
-     * @param clz bean的类型
-     */
-    @Override
-    public <T> T getProxyBean(Class<T> clz) {
-        BeanDefinition beanDefinition = getBeanDefinition(clz);
-        if (beanDefinition.isProxy()) {
-            List<Object> beanList = proxyBeanMap.values().stream().filter(o -> o.getClass().equals(clz)).collect(Collectors.toList());
-            if (CollUtil.isNotEmpty(beanList)) {
-                return (T) beanList.get(0);
-            }
-            return null;
-        }
-        return getBean(clz);
-    }
-
-    /**
-     * 获取代理bean对象
-     *
-     * @param clz bean的类型
-     */
-    public <T> List<T> getProxyBeans(Class<T> clz) {
-        return (List<T>) proxyBeanMap.values().stream().filter(o -> o.getClass().equals(clz)).collect(Collectors.toList());
-    }
 
     public void putProxyBean(String name, Object bean) {
         proxyBeanMap.put(name, bean);

@@ -17,12 +17,7 @@ import java.util.Collection;
 public class ProxyBeanPostProcessor implements BeanPostProcessor {
 
     @Override
-    public void postProcessBeforeInitialization(BeanDefinition beanDefinition, BeanRegister register) {
-
-    }
-
-    @Override
-    public void postProcessAfterInitialization(BeanDefinition beanDefinition, BeanRegister register) {
+    public void postProcessAfterBeforeProcessor(BeanDefinition beanDefinition, BeanRegister register) {
         if (containsAnnotation(beanDefinition.getClz(), Aspect.class)) {
             Container container = Container.getContainer();
             ProxyApplicationContext proxyApplicationContext = container.getBean(ProxyApplicationContext.class);
@@ -54,8 +49,6 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
                     proxyApplicationContext.putProxyBean(wrapper.getName(), aopProxy.getProxy());
                 }
             }
-
-
         }
     }
 
