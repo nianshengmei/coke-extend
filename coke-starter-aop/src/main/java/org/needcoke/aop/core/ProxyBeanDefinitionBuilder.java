@@ -1,9 +1,13 @@
 package org.needcoke.aop.core;
 
+import org.needcoke.aop.proxy.AopProxy;
 import pers.warren.ioc.core.*;
-import pers.warren.ioc.enums.BeanType;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 代理bean定义builder
@@ -15,23 +19,41 @@ public class ProxyBeanDefinitionBuilder extends BeanDefinitionBuilder {
 
     private ProxyBeanDefinition beanDefinition;
 
+    private static final Map<String, Integer> proxyTimeMap = new HashMap<>();
+
+    public ProxyBeanDefinitionBuilder() {
+        this.beanDefinition = new ProxyBeanDefinition();
+    }
 
     public static ProxyBeanDefinitionBuilder genericBeanDefinition(BeanDefinition bdf) {
         ProxyBeanDefinitionBuilder builder = new ProxyBeanDefinitionBuilder();
-        builder.beanDefinition.setParentName(bdf.getName());
-        builder.beanDefinition.setName(bdf.getName()+"#proxy");
-        builder.beanDefinition.setClz(bdf.getClz());
-        builder.beanDefinition.setScanByAnnotation(bdf.getScanByAnnotation());
-        builder.beanDefinition.setScanByAnnotationClass(bdf.getScanByAnnotationClass());
-
-        builder.beanDefinition.setAutowiredFieldInject(bdf.getAutowiredFieldInject());
-        builder.beanDefinition.setPropertyValues(bdf.getPropertyValues());
-        builder.beanDefinition.setRegister(bdf.getRegister());
-        builder.beanDefinition.setExtendedFields(bdf.getExtendedFields());
-        builder.beanDefinition.setSingleton(bdf.isSingleton());
-        builder.beanDefinition.setResourceFieldInject(bdf.getResourceFieldInject());
-        builder.beanDefinition.setInvokeFunction(bdf.getInvokeFunction());
-        builder.beanDefinition.setInvokeSource(bdf.getInvokeSource());
+        if (proxyTimeMap.containsKey(bdf.getName())) {
+            BeanDefinition proxyBeanDefinition = Container.getContainer().getProxyBeanDefinition(bdf.getName());
+            builder.beanDefinition = (ProxyBeanDefinition) proxyBeanDefinition;
+            int time = proxyTimeMap.get(bdf.getName()) + 1;
+            proxyTimeMap.put(bdf.getName(), time);
+            builder.beanDefinition.setProxyTimes(time);
+        }else {
+            builder.beanDefinition.setParentName(bdf.getName());
+            builder.beanDefinition.setName(bdf.getName() + "#proxy");
+            builder.beanDefinition.setClz(bdf.getClz());
+            builder.beanDefinition.setScanByAnnotation(bdf.getScanByAnnotation());
+            builder.beanDefinition.setScanByAnnotationClass(bdf.getScanByAnnotationClass());
+            builder.beanDefinition.setBeanType(bdf.getBeanType());
+            builder.beanDefinition.setAutowiredFieldInject(bdf.getAutowiredFieldInject());
+            builder.beanDefinition.setPropertyValues(bdf.getPropertyValues());
+            builder.beanDefinition.setRegister(bdf.getRegister());
+            builder.beanDefinition.setExtendedFields(bdf.getExtendedFields());
+            builder.beanDefinition.setSingleton(bdf.isSingleton());
+            builder.beanDefinition.setResourceFieldInject(bdf.getResourceFieldInject());
+            builder.beanDefinition.setInvokeFunction(bdf.getInvokeFunction());
+            builder.beanDefinition.setInvokeSource(bdf.getInvokeSource());
+            builder.beanDefinition.setFactoryBeanClass(ProxyFactoryBean.class);
+            builder.beanDefinition.setBeanFactoryClass(DefaultBeanFactory.class);
+            builder.beanDefinition.setValueFiledInject(bdf.getValueFiledInject());
+            proxyTimeMap.put(bdf.getName(), 1);
+            builder.beanDefinition.setProxyTimes(1);
+        }
         return builder;
     }
 
@@ -56,6 +78,14 @@ public class ProxyBeanDefinitionBuilder extends BeanDefinitionBuilder {
     @Override
     public ProxyBeanDefinitionBuilder setScanByAnnotationClass(Class<?> annotationClass) {
         this.beanDefinition.setScanByAnnotationClass(annotationClass);
+        return this;
+    }
+
+    public ProxyBeanDefinitionBuilder addAopProxy(AopProxy aopProxy) {
+        if (null == this.beanDefinition.aopProxyList) {
+            this.beanDefinition.aopProxyList = new ArrayList<>();
+        }
+        this.beanDefinition.aopProxyList.add(aopProxy);
         return this;
     }
 

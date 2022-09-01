@@ -46,7 +46,9 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
                     pointcut.getProxyConfigList().add(proxyConfig);
                     aspect.copy(proxyConfig);
                     AopProxy aopProxy = proxyFactory.createAopProxy(proxyConfig);
-                    proxyApplicationContext.putProxyBean(wrapper.getName(), aopProxy.getProxy());
+                    ProxyBeanDefinitionBuilder builder = ProxyBeanDefinitionBuilder.genericBeanDefinition(wrapper.getBeanDefinition());
+                    builder.addAopProxy(aopProxy);
+                    container.addBeanDefinition(builder.build());
                 }
             }
         }
