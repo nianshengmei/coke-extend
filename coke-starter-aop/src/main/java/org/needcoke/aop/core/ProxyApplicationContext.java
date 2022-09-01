@@ -2,13 +2,15 @@ package org.needcoke.aop.core;
 
 import cn.hutool.core.collection.CollUtil;
 import org.needcoke.aop.proxy.Aspect;
-import org.needcoke.aop.proxy.ProxyConfig;
 import pers.warren.ioc.core.ApplicationContext;
+import pers.warren.ioc.core.BeanDefinition;
+import pers.warren.ioc.core.PreLoad;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 代理容器上下文
@@ -41,7 +43,7 @@ public class ProxyApplicationContext extends ApplicationContext {
     /**
      * 存代理类配置
      *
-     * @param name        @Aspect注解的bean的名称
+     * @param name   @Aspect注解的bean的名称
      * @param aspect 代理配置
      */
     public void putAspect(String name, Aspect aspect) {
@@ -55,6 +57,10 @@ public class ProxyApplicationContext extends ApplicationContext {
      */
     public Aspect getAspect(String name) {
         return aspectMap.get(name);
+    }
+
+    public Stream<Aspect> getAspectStream() {
+        return aspectMap.values().stream();
     }
 
     /**
@@ -71,8 +77,13 @@ public class ProxyApplicationContext extends ApplicationContext {
      *
      * @param name 非代理对象的名称
      */
+    @Override
     public <T> T getProxyBean(String name) {
-        return (T) proxyBeanMap.get(name);
+        BeanDefinition beanDefinition = getBeanDefinition(name);
+        if(beanDefinition.isProxy()) {
+            return (T) proxyBeanMap.get(name);
+        }
+        return getBean(name);
     }
 
     /**
@@ -80,12 +91,17 @@ public class ProxyApplicationContext extends ApplicationContext {
      *
      * @param clz bean的类型
      */
+    @Override
     public <T> T getProxyBean(Class<T> clz) {
-        List<Object> beanList = proxyBeanMap.values().stream().filter(o -> o.getClass().equals(clz)).collect(Collectors.toList());
-        if (CollUtil.isNotEmpty(beanList)) {
-            return (T) beanList.get(0);
+        BeanDefinition beanDefinition = getBeanDefinition(clz);
+        if (beanDefinition.isProxy()) {
+            List<Object> beanList = proxyBeanMap.values().stream().filter(o -> o.getClass().equals(clz)).collect(Collectors.toList());
+            if (CollUtil.isNotEmpty(beanList)) {
+                return (T) beanList.get(0);
+            }
+            return null;
         }
-        return null;
+        return getBean(clz);
     }
 
     /**
@@ -95,5 +111,9 @@ public class ProxyApplicationContext extends ApplicationContext {
      */
     public <T> List<T> getProxyBeans(Class<T> clz) {
         return (List<T>) proxyBeanMap.values().stream().filter(o -> o.getClass().equals(clz)).collect(Collectors.toList());
+    }
+
+    public void putProxyBean(String name, Object bean) {
+        proxyBeanMap.put(name, bean);
     }
 }

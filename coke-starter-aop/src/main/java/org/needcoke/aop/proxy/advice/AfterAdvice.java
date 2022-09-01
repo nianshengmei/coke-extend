@@ -8,4 +8,5 @@ import org.aopalliance.aop.Advice;
  * @author warren
  */
 public interface AfterAdvice extends Advice {
+
 }
