@@ -64,8 +64,4 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
         return null != clz.getAnnotation(annotationClz);
     }
 
-    @Override
-    public void postProcessAfterBeanLoad(BeanDefinitionRegistry register) {
-
-    }
 }
