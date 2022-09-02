@@ -94,7 +94,12 @@ public class RequestMappingHandler extends AbstractHandler {
         }
         if(-1 != bodyIndex && null == parameters[bodyIndex]) {
             try {
-                parameters[bodyIndex] = JSONUtil.toBean(ctx.body(), bodyClz);
+                String body = ctx.body();
+                if (body.startsWith("[")) {
+                    parameters[bodyIndex] = JSONUtil.toList(body, bodyClz);
+                }else if(body.startsWith(("{"))){
+                    parameters[bodyIndex] = JSONUtil.toBean(body, bodyClz);
+                }
             }catch (Exception e){
                 throw new RuntimeException("body parse error bean "+invokeBeanName +" 's method "+invokeMethod.getName() +" 's parameter "+bodyName,e);
             }
@@ -147,7 +152,7 @@ public class RequestMappingHandler extends AbstractHandler {
     protected void initRequestParamItemArr(Method method) {
         Parameter[] parameters = method.getParameters();
         List<Parameter> requestParamList = Arrays.stream(parameters)
-                .filter(p -> null == p.getAnnotation(RequestBody.class)
+                .filter(p -> null == p.getAnnotation(RequestBody.class)||null == p.getAnnotation(PathVariable.class)
                 ).collect(Collectors.toList());
         String[] parameterNames = ReflectUtil.getParameterNames(method);
         Map<Parameter, String> mp = new HashMap<>();
