@@ -19,6 +19,9 @@
         <module>coke-sdk</module>
         <module>coke-starter-tomcat</module>
         <module>coke-starter-aop</module>
+        <module>coke-for-spring</module>
+        <module>coke-mybatis-plus-starter</module>
+        <module>coke-mybatis</module>
     </modules>
 
     <dependencyManagement>

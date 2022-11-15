@@ -45,4 +45,9 @@ public class ProxyFactoryBean implements FactoryBean {
     public Boolean isSingleton() {
         return beanDefinition.isSingleton();
     }
+
+    @Override
+    public String getName() {
+        return beanDefinition.getName();
+    }
 }

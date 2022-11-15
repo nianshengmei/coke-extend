@@ -33,6 +33,7 @@ public class ProxyBeanDefinitionBuilder extends BeanDefinitionBuilder {
             proxyTimeMap.put(bdf.getName(), time);
             builder.beanDefinition.setProxyTimes(time);
         }else {
+            builder.beanDefinition.setProxy(true);
             builder.beanDefinition.setParentName(bdf.getName());
             builder.beanDefinition.setName(bdf.getName() + "#proxy");
             builder.beanDefinition.setClz(bdf.getClz());

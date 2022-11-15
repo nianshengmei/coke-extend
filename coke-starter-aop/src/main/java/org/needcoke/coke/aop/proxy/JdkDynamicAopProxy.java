@@ -1,9 +1,6 @@
 package org.needcoke.coke.aop.proxy;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aopalliance.aop.Advice;
-import org.needcoke.coke.aop.proxy.advice.AbstractAdvice;
-import org.needcoke.coke.aop.util.ClassUtils;
 import pers.warren.ioc.core.Container;
 
 import java.lang.reflect.InvocationHandler;
@@ -26,7 +23,7 @@ public class JdkDynamicAopProxy extends AbstractAopProxy implements InvocationHa
 
     @Override
     public Object getProxy() {
-        return getProxy(ClassUtils.getDefaultClassLoader());
+        return getProxy(sourceBeanClz.getClassLoader());
     }
 
     @Override
@@ -38,27 +35,19 @@ public class JdkDynamicAopProxy extends AbstractAopProxy implements InvocationHa
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Container container = Container.getContainer();
-        boolean flag = proxyConfig.contains(method);
-        adviceInvoke(proxyConfig.getBeforeAdvice(), flag);
-
-        Object invoke = method.invoke(getBean(), args);
-
-        return invoke;
+        return adviceInvoke(method, args);
     }
 
-    private Object adviceInvoke(Advice advice,boolean flag) throws Throwable {
-        Object r = null;
-        if(null != advice && flag){
-            AbstractAdvice abstractAdvice = (AbstractAdvice) advice;
-            abstractAdvice.invoke(r,abstractAdvice.getMethod(),new Object[0], getBean());
-        }
-        return r;
+    private Object adviceInvoke(Method method, Object[] args) throws Throwable {
+        Object target = getBean();
+        return method.invoke(target, args);
     }
 
     /**
      * 容器中获取bean,有代理bean存在则获取代理bean，没有则获取非代理bean
      */
     public Object getBean(){
-        return null;
+        Container container = Container.getContainer();
+        return container.getBean(sourceBeanName);
     }
 }
