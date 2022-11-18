@@ -96,10 +96,10 @@ public class RequestMappingHandler extends AbstractHandler {
             String body = "";
             try {
                 body = ctx.body();
-                parameters[bodyIndex] = JSONUtil.toBean(body,bodyClz);
+                parameters[bodyIndex] = JSONUtil.toBean(body, bodyClz);
             } catch (Exception e) {
                 try {
-                    if(bodyClz.isAssignableFrom(List.class)){
+                    if (bodyClz.isAssignableFrom(List.class)) {
                         System.out.println(body);
                     }
                     parameters[bodyIndex] = JSONUtil.toList(body, Object.class);

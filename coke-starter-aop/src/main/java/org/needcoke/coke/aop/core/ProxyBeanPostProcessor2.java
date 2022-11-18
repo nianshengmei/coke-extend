@@ -23,7 +23,7 @@ public class ProxyBeanPostProcessor2 {
             org.needcoke.coke.aop.proxy.Aspect aspect = org.needcoke.coke.aop.proxy.Aspect.createAspect();
             proxyApplicationContext.putAspect(beanDefinition.getName(), aspect);
             aspect.setAspectBean(container.getBean(beanDefinition.getName()));
-            aspect.initAspect(beanDefinition.getClz());
+            aspect.initAspect(beanDefinition.getClz(),beanDefinition.getName());
             Collection<BeanWrapper> beanWrappers = container.getBeanWrappers();
             AopProxyFactory proxyFactory = container.getBean(AopProxyFactory.class);
             Pointcut pointcut = aspect.getPointcut();
@@ -44,7 +44,7 @@ public class ProxyBeanPostProcessor2 {
                 if (flag) {
                     pointcut.getProxyConfigList().add(proxyConfig);
                     aspect.copy(proxyConfig);
-                    AopProxy aopProxy = proxyFactory.createAopProxy(proxyConfig);
+                    AopProxy aopProxy = proxyFactory.createAopProxy(null);
                     ProxyBeanDefinitionBuilder builder = ProxyBeanDefinitionBuilder.genericBeanDefinition(wrapper.getBeanDefinition());
                     builder.addAopProxy(aopProxy);
                     container.addBeanDefinition(builder.build());

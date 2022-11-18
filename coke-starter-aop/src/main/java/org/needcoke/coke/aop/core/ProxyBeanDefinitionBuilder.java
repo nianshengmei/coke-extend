@@ -2,6 +2,7 @@ package org.needcoke.coke.aop.core;
 
 import org.needcoke.coke.aop.proxy.AopProxy;
 import pers.warren.ioc.core.*;
+import pers.warren.ioc.enums.BeanType;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class ProxyBeanDefinitionBuilder extends BeanDefinitionBuilder {
             builder.beanDefinition.setClz(bdf.getClz());
             builder.beanDefinition.setScanByAnnotation(bdf.getScanByAnnotation());
             builder.beanDefinition.setScanByAnnotationClass(bdf.getScanByAnnotationClass());
-            builder.beanDefinition.setBeanType(bdf.getBeanType());
+            builder.beanDefinition.setBeanType(BeanType.PROXY);
             builder.beanDefinition.setAutowiredFieldInject(bdf.getAutowiredFieldInject());
             builder.beanDefinition.setPropertyValues(bdf.getPropertyValues());
             builder.beanDefinition.setRegister(bdf.getRegister());
@@ -82,10 +83,7 @@ public class ProxyBeanDefinitionBuilder extends BeanDefinitionBuilder {
     }
 
     public ProxyBeanDefinitionBuilder addAopProxy(AopProxy aopProxy) {
-        if (null == this.beanDefinition.aopProxyList) {
-            this.beanDefinition.aopProxyList = new ArrayList<>();
-        }
-        this.beanDefinition.aopProxyList.add(aopProxy);
+        beanDefinition.aopProxy = aopProxy;
         return this;
     }
 

@@ -11,5 +11,5 @@ import org.needcoke.coke.aop.proxy.ProxyConfig;
  */
 public interface AopProxyFactory {
 
-    AopProxy createAopProxy(ProxyConfig config) throws AopConfigException;
+    AopProxy createAopProxy(String beanName) throws AopConfigException;
 }

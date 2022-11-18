@@ -1,6 +1,7 @@
 package org.needcoke.coke.aop.proxy;
 
 import org.aopalliance.aop.Advice;
+import org.needcoke.coke.aop.proxy.advice.*;
 
 /**
  * 切面
@@ -12,27 +13,27 @@ public interface Aspect {
     /**
      * 源bean
      */
-    Advice getBeforeAdvice();
+    BeforeAdvice getBeforeAdvice();
 
     /**
      * 前置通知
      */
-    Advice getAroundAdvice();
+    AroundAdvice getAroundAdvice();
 
     /**
      * 后置返回通知
      */
-    Advice getAfterAdvice();
+    AfterAdvice getAfterAdvice();
 
     /**
      * 后置返回通知
      */
-    Advice getAfterReturningAdvice();
+    AfterReturningAdvice getAfterReturningAdvice();
 
     /**
      * 后置异常通知
      */
-    Advice getAfterThrowingAdvice();
+    ThrowsAdvice getAfterThrowingAdvice();
 
     /**
      * 切点
@@ -46,20 +47,20 @@ public interface Aspect {
 
     void setAspectBean(Object aspectBean);
 
-    void setBeforeAdvice(Advice beforeAdvice);
+    void setBeforeAdvice(BeforeAdvice beforeAdvice);
 
-    void setAroundAdvice(Advice aroundAdvice);
+    void setAroundAdvice(AroundAdvice aroundAdvice);
 
-    void setAfterAdvice(Advice afterAdvice);
+    void setAfterAdvice(AfterAdvice afterAdvice);
 
-    void setAfterReturningAdvice(Advice afterReturningAdvice);
+    void setAfterReturningAdvice(AfterReturningAdvice afterReturningAdvice);
 
-    void setAfterThrowingAdvice(Advice afterThrowingAdvice);
+    void setAfterThrowingAdvice(ThrowsAdvice afterThrowingAdvice);
 
     void setPointcut(Pointcut pointcut);
 
 
-    void initAspect(Class<?> clz);
+    void initAspect(Class<?> clz,String name);
 
 
     void copy(ProxyConfig config);

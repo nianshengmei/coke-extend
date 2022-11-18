@@ -26,12 +26,8 @@ public class ProxyFactoryBean implements FactoryBean {
     public Object getObject() {
         if (beanDefinition instanceof ProxyBeanDefinition) {
             ProxyBeanDefinition proxyBeanDefinition = (ProxyBeanDefinition) beanDefinition;
-            List<AopProxy> aopProxyList = proxyBeanDefinition.getAopProxyList();
-            Object obj = null;
-            for (AopProxy aopProxy : aopProxyList) {
-                obj = aopProxy.getProxy();
-            }
-            return obj;
+            AopProxy aopProxy = proxyBeanDefinition.getAopProxy();
+            return aopProxy.getProxy();
         }
         return null;
     }

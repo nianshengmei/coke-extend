@@ -35,6 +35,11 @@
             <artifactId>aspectjweaver</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.12.18</version>
+        </dependency>
     </dependencies>
 
 </project>
