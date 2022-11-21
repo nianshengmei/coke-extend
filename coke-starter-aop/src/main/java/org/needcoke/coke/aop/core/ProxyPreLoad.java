@@ -1,6 +1,6 @@
 package org.needcoke.coke.aop.core;
 
-import org.needcoke.coke.aop.proxy.Aspect;
+import org.aspectj.lang.annotation.Aspect;
 import pers.warren.ioc.core.PreLoad;
 
 public class ProxyPreLoad implements PreLoad {

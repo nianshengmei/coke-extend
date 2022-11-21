@@ -1,13 +1,17 @@
 package org.needcoke.coke.aop.core;
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.needcoke.coke.aop.proxy.*;
+import pers.warren.ioc.annotation.Component;
 import pers.warren.ioc.core.BeanDefinition;
+import pers.warren.ioc.core.Container;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class DefaultAopProxyFactory implements AopProxyFactory {
@@ -15,25 +19,28 @@ public class DefaultAopProxyFactory implements AopProxyFactory {
     private final ProxyApplicationContext applicationContext;
 
     @Override
-    public AopProxy createAopProxy(ProxyConfig config) throws AopConfigException {
-        String beanName = config.getBeanName();
+    public AopProxy createAopProxy(String beanName) throws AopConfigException {
         BeanDefinition beanDefinition = applicationContext.getBeanDefinition(beanName);
-        if (isJdkProxy(beanDefinition.getClz(), config)) {
-            return new JdkDynamicAopProxy(beanDefinition.getClz(), beanName, config);
+        if (isJdkProxy(beanDefinition.getClz(), beanName)) {
+            return new JdkDynamicAopProxy(beanDefinition.getClz(), beanName);
         } else {
-            return new CglibAopProxy(beanDefinition.getClz(), beanName, config);
+            return new CglibAopProxy(beanDefinition.getClz(), beanName);
         }
     }
 
-    private boolean isJdkProxy(Class<?> clz, ProxyConfig config) {
+    private boolean isJdkProxy(Class<?> clz, String beanName) {
         Class<?>[] interfaces = clz.getInterfaces();
         if (interfaces.length != 1) {
             return false;
         }
         Class<?> ife = interfaces[0];
         Method[] declaredMethods = ife.getDeclaredMethods();
-        Collection<Method> methodCollection = config.getMethodCollection();
+        ProxyBeanDefinition proxyBeanDefinition = (ProxyBeanDefinition) applicationContext.getBeanDefinition(beanName);
+        Collection<Method> methodCollection = proxyBeanDefinition.proxyMethodList;
         boolean ret = false;
+        if (CollUtil.isEmpty(methodCollection)) {
+            return ret;
+        }
         for (Method declaredMethod : declaredMethods) {
             ret = contains(declaredMethod, methodCollection);
         }

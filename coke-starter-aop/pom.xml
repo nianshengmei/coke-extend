@@ -5,7 +5,7 @@
     <parent>
         <artifactId>coke-extend</artifactId>
         <groupId>org.needcoke</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -35,6 +35,11 @@
             <artifactId>aspectjweaver</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.12.18</version>
+        </dependency>
     </dependencies>
 
 </project>

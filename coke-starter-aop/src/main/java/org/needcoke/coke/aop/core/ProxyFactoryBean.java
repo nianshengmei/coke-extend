@@ -26,12 +26,8 @@ public class ProxyFactoryBean implements FactoryBean {
     public Object getObject() {
         if (beanDefinition instanceof ProxyBeanDefinition) {
             ProxyBeanDefinition proxyBeanDefinition = (ProxyBeanDefinition) beanDefinition;
-            List<AopProxy> aopProxyList = proxyBeanDefinition.getAopProxyList();
-            Object obj = null;
-            for (AopProxy aopProxy : aopProxyList) {
-                obj = aopProxy.getProxy();
-            }
-            return obj;
+            AopProxy aopProxy = proxyBeanDefinition.getAopProxy();
+            return aopProxy.getProxy();
         }
         return null;
     }
@@ -44,5 +40,10 @@ public class ProxyFactoryBean implements FactoryBean {
     @Override
     public Boolean isSingleton() {
         return beanDefinition.isSingleton();
+    }
+
+    @Override
+    public String getName() {
+        return beanDefinition.getName();
     }
 }

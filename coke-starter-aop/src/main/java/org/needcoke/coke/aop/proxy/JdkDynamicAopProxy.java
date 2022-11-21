@@ -1,14 +1,19 @@
 package org.needcoke.coke.aop.proxy;
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.aopalliance.aop.Advice;
-import org.needcoke.coke.aop.proxy.advice.AbstractAdvice;
+import org.needcoke.coke.aop.core.ProxyBeanDefinition;
+import org.needcoke.coke.aop.proxy.advice.AroundAdvice;
 import org.needcoke.coke.aop.util.ClassUtils;
+import org.needcoke.coke.aop.util.MethodUtil;
+import org.needcoke.coke.http.ThrowsNotifyObject;
 import pers.warren.ioc.core.Container;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
+import java.util.Map;
 
 /**
  * JDK动态代理
@@ -18,15 +23,14 @@ import java.lang.reflect.Proxy;
 @Slf4j
 public class JdkDynamicAopProxy extends AbstractAopProxy implements InvocationHandler {
 
-
-    public JdkDynamicAopProxy(Class<?> sourceBeanClz, String sourceBeanName, ProxyConfig proxyConfig) {
-        super(sourceBeanClz, sourceBeanName, proxyConfig);
-        log.info("jdk 动态代理  {}",proxyConfig.getBeanName());
+    public JdkDynamicAopProxy(Class<?> sourceBeanClz, String sourceBeanName) {
+        super(sourceBeanClz, sourceBeanName);
+        log.info("jdk 动态代理  {}", sourceBeanName);
     }
 
     @Override
     public Object getProxy() {
-        return getProxy(ClassUtils.getDefaultClassLoader());
+        return getProxy(sourceBeanClz.getClassLoader());
     }
 
     @Override
@@ -38,27 +42,46 @@ public class JdkDynamicAopProxy extends AbstractAopProxy implements InvocationHa
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Container container = Container.getContainer();
-        boolean flag = proxyConfig.contains(method);
-        adviceInvoke(proxyConfig.getBeforeAdvice(), flag);
-
-        Object invoke = method.invoke(getBean(), args);
-
-        return invoke;
+        ProxyBeanDefinition proxyBeanDefinition = (ProxyBeanDefinition) container.getProxyBeanDefinition(sourceBeanName);
+        Map<String, ProxyMethod> proxyMethodMap = proxyBeanDefinition.getProxyMethodMap();
+        return invokeNoAround(proxyMethodMap, proxy, method, args);
     }
 
-    private Object adviceInvoke(Advice advice,boolean flag) throws Throwable {
-        Object r = null;
-        if(null != advice && flag){
-            AbstractAdvice abstractAdvice = (AbstractAdvice) advice;
-            abstractAdvice.invoke(r,abstractAdvice.getMethod(),new Object[0], getBean());
+    public Object invokeNoAround(Map<String, ProxyMethod> proxyMethodMap, Object proxy, Method method, Object[] args) throws Throwable {
+        Object ret = null;
+        Throwable exp = null;
+        try {
+            ret = withExceptionInvoke(proxyMethodMap, proxy, method, args);
+            return ret;
+        } catch (Throwable throwable) {
+            exp = throwable;
+            if (null == proxyMethodMap) {
+                throw throwable;
+            }
+            ProxyMethod proxyMethod = proxyMethodMap.get(MethodUtil.getMethodName(method));
+            ThrowsNotifyObject throwsNotifyObject = new ThrowsNotifyObject(throwable, invokeThrowsAdvice(proxyMethod, method, args, throwable));
+            return ClassUtils.createDynamicClzObject(method.getReturnType(), throwsNotifyObject);
+        } finally {
+            if (null != proxyMethodMap) {
+                ProxyMethod proxyMethod = proxyMethodMap.get(MethodUtil.getMethodName(method));
+                if (null == exp) {
+                    invokeAfterReturningAdvice(proxyMethod, method, args, ret);
+                }
+                invokeAfterAdvice(proxyMethod, method, args, ret, exp);
+            }
         }
-        return r;
     }
 
-    /**
-     * 容器中获取bean,有代理bean存在则获取代理bean，没有则获取非代理bean
-     */
-    public Object getBean(){
-        return null;
+    public Object withExceptionInvoke(Map<String, ProxyMethod> proxyMethodMap, Object proxy, Method method, Object[] args) throws Throwable {
+        Container container = Container.getContainer();
+        Object target = container.getSimpleBean(sourceBeanName);
+        if (null == proxyMethodMap) {
+            return method.invoke(target, args);
+        }
+        ProxyMethod proxyMethod = proxyMethodMap.get(MethodUtil.getMethodName(method));
+        invokeBeforeAdvice(proxyMethod, method, args);
+        return method.invoke(target, args);
     }
+
+
 }
