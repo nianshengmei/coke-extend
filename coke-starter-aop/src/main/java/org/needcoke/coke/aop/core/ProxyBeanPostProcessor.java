@@ -1,8 +1,8 @@
 package org.needcoke.coke.aop.core;
 
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.weaver.tools.PointcutExpression;
 import org.aspectj.weaver.tools.ShadowMatch;
+import org.needcoke.coke.aop.annotation.Aspect;
 import org.needcoke.coke.aop.proxy.AopProxy;
 import org.needcoke.coke.aop.proxy.Pointcut;
 import org.needcoke.coke.aop.proxy.ProxyMethod;
@@ -20,7 +20,7 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
     @Override
     public void postProcessAfterBeforeProcessor(BeanDefinition beanDefinition, BeanRegister register) {
         Container container = Container.getContainer();
-        if (containsAnnotation(beanDefinition.getClz(), Aspect.class)) {
+        if (containsAnnotation(beanDefinition.getClz(), Aspect.class) ||containsAnnotation(beanDefinition.getClz(), org.aspectj.lang.annotation.Aspect.class)) {
             org.needcoke.coke.aop.proxy.Aspect aspect = org.needcoke.coke.aop.proxy.Aspect.createAspect();
             aspect.setAspectBean(Container.getContainer().getBean(beanDefinition.getName()));
             aspect.initAspect(beanDefinition.getClz(),beanDefinition.getName());

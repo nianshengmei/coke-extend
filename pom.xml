@@ -7,7 +7,7 @@
     <groupId>org.needcoke</groupId>
     <artifactId>coke-extend</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <properties>
         <jv>1.8</jv>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -29,13 +29,13 @@
             <dependency>
                 <groupId>org.needcoke</groupId>
                 <artifactId>coke</artifactId>
-                <version>1.0.1</version>
+                <version>1.0.2</version>
             </dependency>
 
             <dependency>
                 <groupId>org.needcoke</groupId>
                 <artifactId>coke-sdk</artifactId>
-                <version>1.0.1</version>
+                <version>1.0.2</version>
             </dependency>
 
             <dependency>
@@ -62,7 +62,7 @@
             <dependency>
                 <groupId>org.needcoke</groupId>
                 <artifactId>coke-starter-tomcat</artifactId>
-                <version>1.0.1</version>
+                <version>1.0.2</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -73,7 +73,7 @@
             <dependency>
                 <groupId>org.needcoke</groupId>
                 <artifactId>coke-starter-web</artifactId>
-                <version>1.0.1</version>
+                <version>1.0.2</version>
             </dependency>
 
             <dependency>
@@ -124,7 +124,7 @@
             <dependency>
                 <groupId>org.needcoke</groupId>
                 <artifactId>coke-starter-aop</artifactId>
-                <version>1.0.1</version>
+                <version>1.0.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
