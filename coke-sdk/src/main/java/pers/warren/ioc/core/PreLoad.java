@@ -17,4 +17,9 @@ public interface PreLoad {
      */
     Class<?>[] preloadBasicComponentAnnotationClass();
 
+    /**
+     * 容器会找到这种类型的所有类
+     */
+    Class<?>[] findClasses();
+
 }

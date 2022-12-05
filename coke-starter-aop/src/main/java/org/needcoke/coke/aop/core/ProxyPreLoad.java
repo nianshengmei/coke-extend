@@ -17,4 +17,9 @@ public class ProxyPreLoad implements PreLoad {
     public Class<?>[]preloadBasicComponentAnnotationClass() {
         return new Class[]{Aspect.class, org.needcoke.coke.aop.annotation.Aspect.class};
     }
+
+    @Override
+    public Class<?>[] findClasses() {
+        return new Class[0];
+    }
 }
