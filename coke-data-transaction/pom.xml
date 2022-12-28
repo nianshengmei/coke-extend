@@ -8,7 +8,7 @@
         <version>1.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <description>coke事务相关支持</description>
     <artifactId>coke-data-transaction</artifactId>
 
     <properties>
