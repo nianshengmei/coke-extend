@@ -23,6 +23,7 @@
         <module>coke-mybatis-plus-starter</module>
         <module>coke-mybatis</module>
         <module>coke-data-redis</module>
+        <module>coke-data-transaction</module>
     </modules>
 
     <dependencyManagement>

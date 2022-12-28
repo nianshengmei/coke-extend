@@ -31,8 +31,8 @@ public class RedisPostHandler implements CokePostHandler {
 
         //主从模式
 
-        RedissonClient redissonClient = Redisson.create(config);
-        componentMap.put("coreRedisClient",redissonClient);
+        //RedissonClient redissonClient = Redisson.create(config);
+        //componentMap.put("coreRedisClient",redissonClient);
 
     }
 }
