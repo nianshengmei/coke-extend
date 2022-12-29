@@ -5,6 +5,7 @@ import org.needcoke.coke.web.annotation.*;
 import org.needcoke.coke.web.client.HttpClientCache;
 import org.needcoke.coke.web.client.WebClientException;
 import org.needcoke.coke.web.http.HttpType;
+import pers.warren.ioc.util.ReflectUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -129,7 +130,23 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
                 String errorMsg = String.format("not support http method  %s , %s", clientInterface.getTypeName(), method.getName());
                 throw new WebClientException(errorMsg);
         }
+        String[] parameterNames = ReflectUtil.getParameterNames(method);
         Parameter[] parameters = method.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            if (parameters[i].getAnnotation(RequestBody.class) != null) {
+                cache.setBodyParamName(parameterNames[i]);
+                continue;
+            }
+
+            if (parameters[i].getAnnotation(RequestHeader.class) != null) {
+
+            }
+
+
+            if(parameters[i].getAnnotation(RequestParam.class) != null){
+;
+            }
+        }
     }
 
 }
