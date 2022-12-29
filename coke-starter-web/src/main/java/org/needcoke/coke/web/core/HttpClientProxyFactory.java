@@ -23,6 +23,6 @@ public class HttpClientProxyFactory {
         if(StrUtil.isNotEmpty(serviceName)){
             //TODO 跨服务调用
         }
-        return (Client) Proxy.newProxyInstance(ClassUtil.getClassLoader(), new Class[]{clientClass}, new HttpClientProxy(requestModel));
+        return (Client) Proxy.newProxyInstance(ClassUtil.getClassLoader(), new Class[]{clientClass}, new HttpClientProxy(clientClass));
     }
 }
