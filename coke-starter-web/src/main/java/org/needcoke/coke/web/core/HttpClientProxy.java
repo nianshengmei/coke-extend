@@ -31,7 +31,7 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
         }
     }
 
-    public void validateAnnotation(Method method) {
+    public boolean validateAnnotation(Method method) {
         int i = 0;
         if (method.getAnnotation(GET.class) != null) {
             i++;
@@ -49,10 +49,12 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
             i++;
         }
 
-        if(i > 1 || i == 0){
+        if(i > 1){
             String errorMsg = String.format("the method {%s} must have only one http annotation", method.getName());
             throw new WebClientException(errorMsg);
         }
+
+        return i != 0;
     }
 
 }
