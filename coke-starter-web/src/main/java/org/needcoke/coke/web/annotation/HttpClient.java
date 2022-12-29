@@ -11,6 +11,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface HttpClient {
 
+    String value() default "";
+
+    String name() default "";
+
     /**
      * 链接
      */
