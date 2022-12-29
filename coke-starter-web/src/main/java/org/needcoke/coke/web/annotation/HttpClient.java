@@ -20,6 +20,8 @@ public @interface HttpClient {
      */
     String uri() default "";
 
+    String path() default "";
+
     /**
      * 微服务服务名
      */
