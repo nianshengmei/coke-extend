@@ -49,62 +49,66 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
         if (StrUtil.isNotEmpty(httpClientCache.getBodyParamName())) {
             Object body = argsMap.get(httpClientCache.getBodyParamName());
             byte[] byteArray = new byte[0];
-            if(null != body){
+            if (null != body) {
                 byteArray = SerializeUtil.toJson(body).getBytes(StandardCharsets.UTF_8);
             }
             requestBody = okhttp3.RequestBody.create(byteArray);
         }
-        builder.method(httpClientCache.getHttpType().name(),requestBody);
+        builder.method(httpClientCache.getHttpType().name(), requestBody);
 
-        if(CollUtil.isNotEmpty(httpClientCache.getHeaderParamNameList())){
+        if (CollUtil.isNotEmpty(httpClientCache.getHeaderParamNameList())) {
             List<HttpMethodParamNameInfo> headerParamNameList = httpClientCache.getHeaderParamNameList();
             for (HttpMethodParamNameInfo httpMethodParamNameInfo : headerParamNameList) {
                 Object header = argsMap.get(httpMethodParamNameInfo.getMethodParameterName());
-                if(null == header && StrUtil.isNotEmpty(httpMethodParamNameInfo.getDefaultValue().toString())){
+                if (null == header && StrUtil.isNotEmpty(httpMethodParamNameInfo.getDefaultValue().toString())) {
                     header = httpMethodParamNameInfo.getDefaultValue();
                 }
-                builder.addHeader(httpMethodParamNameInfo.getCastToName(),String.valueOf(header));
+                builder.addHeader(httpMethodParamNameInfo.getCastToName(), String.valueOf(header));
             }
 
         }
 
         StringBuilder urlParamBuilder = new StringBuilder();
-        if (CollUtil.isNotEmpty(httpClientCache.getUrlParamNameList())){
+        if (CollUtil.isNotEmpty(httpClientCache.getUrlParamNameList())) {
             List<HttpMethodParamNameInfo> urlParamNameList = httpClientCache.getUrlParamNameList();
             for (HttpMethodParamNameInfo httpMethodParamNameInfo : urlParamNameList) {
                 Object param = argsMap.get(httpMethodParamNameInfo.getMethodParameterName());
-                if(null == param && StrUtil.isNotEmpty(httpMethodParamNameInfo.getDefaultValue().toString())){
+                if (null == param && StrUtil.isNotEmpty(httpMethodParamNameInfo.getDefaultValue().toString())) {
                     param = httpMethodParamNameInfo.getDefaultValue();
                 }
                 urlParamBuilder.append("&")
                         .append(httpMethodParamNameInfo.getCastToName())
                         .append("=");
-                if(ObjectUtil.isNotEmpty(param)){
+                if (ObjectUtil.isNotEmpty(param)) {
                     urlParamBuilder.append(param);
-                }else{
+                } else {
                     urlParamBuilder.append("null");
                 }
             }
-            urlParamBuilder.replace(0,1,"?");
+            urlParamBuilder.replace(0, 1, "?");
         }
-        builder.url(httpClientCache.getPath()+urlParamBuilder);
+        builder.url(httpClientCache.getPath() + urlParamBuilder);
         Request request = builder.build();
         Call call = holder.getOkHttpClient().newCall(request);
         Response response;
         try {
-             response = call.execute();
-        }catch (Throwable e){
+            response = call.execute();
+        } catch (Throwable e) {
             throw new WebNetException(e);
         }
-        if(!response.isSuccessful() || null == response.body()){
+        if (!response.isSuccessful() || null == response.body()) {
             throw new WebNetException("网络异常");
         }
         ResponseBody body = response.body();
         String json = body.string();
-        if(StrUtil.isEmpty(json)){
+        if (StrUtil.isEmpty(json)) {
             return null;
         }
-        return SerializeUtil.fromJson(json,httpClientCache.getReturnType());
+        try {
+            return SerializeUtil.fromJson(json, httpClientCache.getReturnType());
+        } catch (Throwable e) {
+            throw new WebNetException(json);
+        }
     }
 
 

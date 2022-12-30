@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.coke.core.Order;
 import org.needcoke.coke.http.CokeHttpServlet;
+import org.needcoke.coke.http.WebServerException;
 import org.needcoke.coke.web.core.WebApplicationContext;
 import pers.warren.ioc.annotation.Component;
 
@@ -36,9 +37,10 @@ public class CokeMainServlet extends CokeHttpServlet {
         if(null == handlerMappingList) autowiredHandlerMappingList();
         for (HandlerMapping handlerMapping : handlerMappingList) {
             if (handlerMapping.mapping(req,resp)) {
-                break;
+                return;
             }
         }
+        throw new WebServerException(String.format("no match url path %s",req.getRequestURI()));
     }
 
 }

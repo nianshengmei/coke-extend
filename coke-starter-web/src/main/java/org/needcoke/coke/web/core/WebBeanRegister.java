@@ -1,6 +1,7 @@
 package org.needcoke.coke.web.core;
 
 import org.needcoke.coke.annotation.Controller;
+import org.needcoke.coke.web.annotation.ControllerAdvice;
 import pers.warren.ioc.core.*;
 import pers.warren.ioc.enums.BeanType;
 
@@ -34,6 +35,7 @@ public class WebBeanRegister implements BeanRegister {
             beanDefinition = builder.build();
             registry.registerBeanDefinition(name,beanDefinition);
         }
+
         return beanDefinition;
     }
 }

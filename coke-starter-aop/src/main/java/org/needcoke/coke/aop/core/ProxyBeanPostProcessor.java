@@ -57,6 +57,7 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
                 if(null != proxyBeanDefinition && null == proxyBeanDefinition.getAopProxy()) {
                     AopProxy aopProxy = Container.getContainer().getBean(AopProxyFactory.class).createAopProxy(proxyBeanDefinition.getName());
                     proxyBeanDefinition.setAopProxy(aopProxy);
+                    ProxyBeanDefinition pbd= (ProxyBeanDefinition) container.getProxyBeanDefinition(wrapper.getName());
                 }
             }
 
