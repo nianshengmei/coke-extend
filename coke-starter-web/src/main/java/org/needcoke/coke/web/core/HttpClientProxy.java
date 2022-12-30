@@ -1,30 +1,110 @@
 package org.needcoke.coke.web.core;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.needcoke.coke.web.annotation.*;
-import org.needcoke.coke.web.client.HttpClientCache;
-import org.needcoke.coke.web.client.WebClientException;
+import org.needcoke.coke.web.client.*;
 import org.needcoke.coke.web.http.HttpType;
 import pers.warren.ioc.util.ReflectUtil;
+import pers.warren.ioc.util.SerializeUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HttpClientProxy implements InvocationHandler, Serializable {
 
-    private Class<?> clientInterface;
+    private final Class<?> clientInterface;
+
+    private static final OkHttpClientHolder holder = new OkHttpClientHolder();
 
 
     public HttpClientProxy(Class<?> clientInterface) {
         this.clientInterface = clientInterface;
+        initCache(clientInterface);
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        HttpClientCache httpClientCache = HttpClientCacheMgmt.getInstance().get(clientInterface, method);
+        String[] parameterNames = httpClientCache.getParameterNames();
+        Map<String, Object> argsMap = new HashMap<>(parameterNames.length);
+        for (int i = 0; i < parameterNames.length; i++) {
+            argsMap.put(parameterNames[i], args[i]);
+        }
+        Request.Builder builder = new Request.Builder();
 
-        return null;
+        okhttp3.RequestBody requestBody = null;
+        if (StrUtil.isNotEmpty(httpClientCache.getBodyParamName())) {
+            Object body = argsMap.get(httpClientCache.getBodyParamName());
+            byte[] byteArray = new byte[0];
+            if(null != body){
+                byteArray = SerializeUtil.toJson(body).getBytes(StandardCharsets.UTF_8);
+            }
+            requestBody = okhttp3.RequestBody.create(byteArray);
+        }
+        builder.method(httpClientCache.getHttpType().name(),requestBody);
+
+        if(CollUtil.isNotEmpty(httpClientCache.getHeaderParamNameList())){
+            List<HttpMethodParamNameInfo> headerParamNameList = httpClientCache.getHeaderParamNameList();
+            for (HttpMethodParamNameInfo httpMethodParamNameInfo : headerParamNameList) {
+                Object header = argsMap.get(httpMethodParamNameInfo.getMethodParameterName());
+                if(null == header && StrUtil.isNotEmpty(httpMethodParamNameInfo.getDefaultValue().toString())){
+                    header = httpMethodParamNameInfo.getDefaultValue();
+                }
+                builder.addHeader(httpMethodParamNameInfo.getCastToName(),String.valueOf(header));
+            }
+
+        }
+
+        StringBuilder urlParamBuilder = new StringBuilder();
+        if (CollUtil.isNotEmpty(httpClientCache.getUrlParamNameList())){
+            List<HttpMethodParamNameInfo> urlParamNameList = httpClientCache.getUrlParamNameList();
+            for (HttpMethodParamNameInfo httpMethodParamNameInfo : urlParamNameList) {
+                Object param = argsMap.get(httpMethodParamNameInfo.getMethodParameterName());
+                if(null == param && StrUtil.isNotEmpty(httpMethodParamNameInfo.getDefaultValue().toString())){
+                    param = httpMethodParamNameInfo.getDefaultValue();
+                }
+                urlParamBuilder.append("&")
+                        .append(httpMethodParamNameInfo.getCastToName())
+                        .append("=");
+                if(ObjectUtil.isNotEmpty(param)){
+                    urlParamBuilder.append(param);
+                }else{
+                    urlParamBuilder.append("null");
+                }
+            }
+            urlParamBuilder.replace(0,1,"?");
+        }
+        builder.url(httpClientCache.getPath()+urlParamBuilder);
+        Request request = builder.build();
+        Call call = holder.getOkHttpClient().newCall(request);
+        Response response;
+        try {
+             response = call.execute();
+        }catch (Throwable e){
+            throw new WebNetException(e);
+        }
+        if(!response.isSuccessful() || null == response.body()){
+            throw new WebNetException("网络异常");
+        }
+        ResponseBody body = response.body();
+        String json = body.string();
+        if(StrUtil.isEmpty(json)){
+            return null;
+        }
+        return SerializeUtil.fromJson(json,httpClientCache.getReturnType());
     }
 
 
@@ -132,6 +212,8 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
         }
         String[] parameterNames = ReflectUtil.getParameterNames(method);
         Parameter[] parameters = method.getParameters();
+        List<HttpMethodParamNameInfo> paramMap = new ArrayList<>();
+        List<HttpMethodParamNameInfo> headerMap = new ArrayList<>();
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i].getAnnotation(RequestBody.class) != null) {
                 cache.setBodyParamName(parameterNames[i]);
@@ -139,14 +221,35 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
             }
 
             if (parameters[i].getAnnotation(RequestHeader.class) != null) {
-
+                RequestHeader annotation = parameters[i].getAnnotation(RequestHeader.class);
+                HttpMethodParamNameInfo httpMethodParamNameInfo = new HttpMethodParamNameInfo()
+                        .setMethodParameterName(parameterNames[i])
+                        .setDefaultValue(annotation.defaultValue())
+                        .setCastToName(annotation.value());
+                headerMap.add(httpMethodParamNameInfo);
+                continue;
             }
 
-
-            if(parameters[i].getAnnotation(RequestParam.class) != null){
-;
+            HttpMethodParamNameInfo httpMethodParamNameInfo = new HttpMethodParamNameInfo()
+                    .setMethodParameterName(parameterNames[i]);
+            if (parameters[i].getAnnotation(RequestParam.class) != null) {
+                RequestParam annotation = parameters[i].getAnnotation(RequestParam.class);
+                httpMethodParamNameInfo.setDefaultValue(annotation.defaultValue())
+                        .setCastToName(annotation.value());
+            } else {
+                httpMethodParamNameInfo.setDefaultValue("")
+                        .setCastToName(parameterNames[i]);
             }
+            if (StrUtil.isEmpty(httpMethodParamNameInfo.getCastToName())) {
+                httpMethodParamNameInfo.setCastToName(parameterNames[i]);
+            }
+            paramMap.add(httpMethodParamNameInfo);
         }
+        cache.setHeaderParamNameList(headerMap);
+        cache.setUrlParamNameList(paramMap);
+        cache.setParameterNames(parameterNames);
+        cache.setReturnType(method.getReturnType());
+        HttpClientCacheMgmt.getInstance().addCache(clientInterface, method, cache);
     }
 
 }

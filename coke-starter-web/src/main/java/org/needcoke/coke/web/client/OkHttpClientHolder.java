@@ -1,8 +1,6 @@
 package org.needcoke.coke.web.client;
 
 import okhttp3.OkHttpClient;
-import pers.warren.ioc.annotation.Bean;
-import pers.warren.ioc.annotation.Configuration;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -13,9 +11,9 @@ import java.security.cert.X509Certificate;
 
 public class OkHttpClientHolder {
 
-    private final static OkHttpClient okHttpClient;
+    private final OkHttpClient okHttpClient;
 
-    static {
+    {
         X509TrustManager trustManager = null;
         SSLContext sslContext = null;
         try {
@@ -45,7 +43,8 @@ public class OkHttpClientHolder {
         okHttpClient= builder.build();
     }
 
-    public static OkHttpClient getOkHttpClient() {
+    public OkHttpClient getOkHttpClient() {
         return okHttpClient;
     }
+
 }

@@ -3,6 +3,8 @@ package org.needcoke.coke.web.client;
 import lombok.Data;
 import org.needcoke.coke.web.http.HttpType;
 
+import java.util.List;
+
 @Data
 public class HttpClientCache {
 
@@ -12,7 +14,11 @@ public class HttpClientCache {
 
     private String bodyParamName;
 
-    private HttpMethodParamNameInfo[] urlParamNameArray;
+    private List<HttpMethodParamNameInfo> urlParamNameList;
 
-    private HttpMethodParamNameInfo[] headerParamNameArray;
+    private List<HttpMethodParamNameInfo> headerParamNameList;
+
+    private String[] parameterNames;
+
+    private Class<?> returnType;
 }

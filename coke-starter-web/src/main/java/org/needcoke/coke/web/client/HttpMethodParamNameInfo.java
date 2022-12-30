@@ -1,8 +1,10 @@
 package org.needcoke.coke.web.client;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class HttpMethodParamNameInfo {
 
     /**
