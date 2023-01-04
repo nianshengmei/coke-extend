@@ -12,4 +12,9 @@ public class WebPreLoad implements PreLoad {
     public Class<?>[] preloadBasicComponentAnnotationClass() {
         return new Class[0];
     }
+
+    @Override
+    public Class<?>[] findClasses() {
+        return new Class[0];
+    }
 }

@@ -1,6 +1,5 @@
 package org.needcoke.coke.web.core;
 
-import org.needcoke.coke.annotation.Controller;
 import org.needcoke.coke.web.annotation.HttpClient;
 import pers.warren.ioc.core.*;
 import pers.warren.ioc.enums.BeanType;

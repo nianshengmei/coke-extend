@@ -58,7 +58,7 @@ public class CokeMainServlet extends CokeHttpServlet {
                 List<String> interceptorNameList = InterceptorCacheMgmt.instance.get(pattern);
                 for (String interceptorName : interceptorNameList) {
                     Interceptor interceptor = applicationContext.getBean(interceptorName);
-                    interceptor.afterCompletion(req,resp);
+                    interceptor.afterCompletion(req, resp);
                 }
             }
         }

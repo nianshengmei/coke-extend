@@ -97,7 +97,7 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
             throw new WebNetException(e);
         }
         if (!response.isSuccessful() || null == response.body()) {
-            throw new WebNetException("网络异常");
+            throw new WebNetException(String.format("网络异常 %s",response.message()));
         }
         ResponseBody body = response.body();
         String json = body.string();
