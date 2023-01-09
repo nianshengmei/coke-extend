@@ -1,6 +1,7 @@
 package org.needcoke.coke.aop.core;
 
 import org.aspectj.lang.annotation.Aspect;
+import org.needcoke.coke.aop.proxy.MethodDeterminesProxy;
 import pers.warren.ioc.core.PreLoad;
 
 public class ProxyPreLoad implements PreLoad {
@@ -10,7 +11,7 @@ public class ProxyPreLoad implements PreLoad {
      */
     @Override
     public Class<?>[] preloadBasicComponentClass() {
-        return new Class[]{AopProxyFactory.class};
+        return new Class[]{AopProxyFactory.class, MethodDeterminesProxy.class};
     }
 
     @Override

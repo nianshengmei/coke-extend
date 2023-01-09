@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>coke-starter-aop</artifactId>
+    <artifactId>coke-starter-undertow</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,27 +18,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.gitee.needcoke</groupId>
-            <artifactId>coke-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.gitee.needcoke</groupId>
-            <artifactId>coke</artifactId>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-core</artifactId>
+            <version>2.3.2.Final</version>
         </dependency>
 
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-servlet</artifactId>
+            <version>2.3.2.Final</version>
         </dependency>
 
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-websockets-jsr</artifactId>
+            <version>2.3.2.Final</version>
         </dependency>
     </dependencies>
 

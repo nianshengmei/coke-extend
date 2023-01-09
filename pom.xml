@@ -51,12 +51,14 @@
         <module>coke-starter-web</module>
         <module>coke-sdk</module>
         <module>coke-starter-tomcat</module>
+        <module>coke-starter-undertow</module>
         <module>coke-starter-aop</module>
         <module>coke-for-spring</module>
         <module>coke-mybatis-plus-starter</module>
         <module>coke-mybatis</module>
         <module>coke-data-redis</module>
         <module>coke-data-transaction</module>
+        <module>coke-starter-kafka</module>
     </modules>
 
     <dependencyManagement>
@@ -162,6 +164,22 @@
                 <version>1.0.2-RELEASE</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.undertow</groupId>
+                <artifactId>undertow-core</artifactId>
+                <version>2.2.22.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.19.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>2.19.0</version>
+            </dependency>
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
