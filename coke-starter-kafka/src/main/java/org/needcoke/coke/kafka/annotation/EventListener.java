@@ -7,9 +7,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface Producer {
+public @interface EventListener {
 
-    String topic() default "";
+    String topic();
 
-    String partition() default "";
+    String group() default "";
+
+    int partition() default -1;
 }

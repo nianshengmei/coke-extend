@@ -7,7 +7,6 @@ import org.needcoke.coke.kafka.annotation.Producer;
 
 public class KafkaMethodDeterminesProxy implements MethodDeterminesProxy {
 
-
     @Override
     public MethodStrategy[] methodAnnotationClasses() {
         return new MethodStrategy[]{new MethodStrategy(Producer.class, AdviceType.AFTER,"kafkaAspect","after")};
