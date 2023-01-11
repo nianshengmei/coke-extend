@@ -5,7 +5,7 @@
     <parent>
         <artifactId>coke-extend</artifactId>
         <groupId>io.gitee.needcoke</groupId>
-        <version>1.0.2-RELEASE</version>
+        <version>1.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <description>coke事务相关支持</description>

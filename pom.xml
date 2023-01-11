@@ -7,7 +7,7 @@
     <groupId>io.gitee.needcoke</groupId>
     <artifactId>coke-extend</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-RELEASE</version>
+    <version>1.0.3</version>
 
     <name>coke-extend</name>
     <description>official extension package of coke</description>
@@ -66,13 +66,13 @@
             <dependency>
                 <groupId>io.gitee.needcoke</groupId>
                 <artifactId>coke</artifactId>
-                <version>1.0.2-RELEASE</version>
+                <version>1.0.3</version>
             </dependency>
 
             <dependency>
                 <groupId>io.gitee.needcoke</groupId>
                 <artifactId>coke-sdk</artifactId>
-                <version>1.0.2-RELEASE</version>
+                <version>1.0.3</version>
             </dependency>
 
             <dependency>
@@ -99,7 +99,7 @@
             <dependency>
                 <groupId>io.gitee.needcoke</groupId>
                 <artifactId>coke-starter-tomcat</artifactId>
-                <version>1.0.2-RELEASE</version>
+                <version>1.0.3</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -110,7 +110,7 @@
             <dependency>
                 <groupId>io.gitee.needcoke</groupId>
                 <artifactId>coke-starter-web</artifactId>
-                <version>1.0.2-RELEASE</version>
+                <version>1.0.3</version>
             </dependency>
 
             <dependency>
@@ -161,7 +161,7 @@
             <dependency>
                 <groupId>io.gitee.needcoke</groupId>
                 <artifactId>coke-starter-aop</artifactId>
-                <version>1.0.2-RELEASE</version>
+                <version>1.0.3</version>
             </dependency>
 
             <dependency>
