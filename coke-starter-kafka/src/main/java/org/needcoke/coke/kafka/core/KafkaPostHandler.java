@@ -30,6 +30,9 @@ public class KafkaPostHandler implements CokePostHandler {
     @Resource
     private ApplicationContext applicationContext;
 
+    @Resource
+    private CokeThreadPool threadPool;
+
     @Override
     public void run() throws Throwable {
 
@@ -53,7 +56,7 @@ public class KafkaPostHandler implements CokePostHandler {
                                 Object bean = applicationContext.getBean(beanName);
                                 CokeEvent event = SerializeUtil.fromJson(message, cache.getEvtType());
                                 event.setOffset(offset).setPartition(partition).setTimestamp(timestamp).setTopic(topic);
-                                CokeThreadPool.threadPool.newTask(() -> {
+                                threadPool.newTask(() -> {
                                     try {
                                         cache.getMethod().invoke(bean, event);
                                     } catch (Exception e) {

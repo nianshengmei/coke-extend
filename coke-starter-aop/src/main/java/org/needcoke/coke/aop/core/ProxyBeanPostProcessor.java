@@ -23,10 +23,10 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
     @Override
     public void postProcessAfterBeforeProcessor(BeanDefinition beanDefinition, BeanRegister register) {
         Container container = Container.getContainer();
-        if (containsAnnotation(beanDefinition.getClz(), Aspect.class) ||containsAnnotation(beanDefinition.getClz(), org.aspectj.lang.annotation.Aspect.class)) {
+        if (containsAnnotation(beanDefinition.getClz(), Aspect.class) || containsAnnotation(beanDefinition.getClz(), org.aspectj.lang.annotation.Aspect.class)) {
             org.needcoke.coke.aop.proxy.Aspect aspect = org.needcoke.coke.aop.proxy.Aspect.createAspect();
             aspect.setAspectBean(Container.getContainer().getBean(beanDefinition.getName()));
-            aspect.initAspect(beanDefinition.getClz(),beanDefinition.getName());
+            aspect.initAspect(beanDefinition.getClz(), beanDefinition.getName());
             Pointcut pointcut = aspect.getPointcut(); //切点
             PointcutExpression pointcutExpression = pointcut.getPointcutExpression(); //切点表达式
             Collection<BeanWrapper> beanWrappers = container.getBeanWrappers();
@@ -49,7 +49,7 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
                         }
                         ProxyMethod proxyMethod = proxyBeanDefinition.proxyMethodMap.get(getMethodName(declaredMethod));
                         initProxyMethod(aspect, proxyMethod);
-                        if(null == proxyBeanDefinition.getProxyMethodList()){
+                        if (null == proxyBeanDefinition.getProxyMethodList()) {
                             proxyBeanDefinition.setProxyMethodList(new ArrayList<>());
                         }
                         proxyBeanDefinition.getProxyMethodList().add(declaredMethod);
@@ -57,10 +57,10 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
                     }
 
                 }
-                if(null != proxyBeanDefinition && null == proxyBeanDefinition.getAopProxy()) {
+                if (null != proxyBeanDefinition && null == proxyBeanDefinition.getAopProxy()) {
                     AopProxy aopProxy = Container.getContainer().getBean(AopProxyFactory.class).createAopProxy(proxyBeanDefinition.getName());
                     proxyBeanDefinition.setAopProxy(aopProxy);
-                    ProxyBeanDefinition pbd= (ProxyBeanDefinition) container.getProxyBeanDefinition(wrapper.getName());
+                    ProxyBeanDefinition pbd = (ProxyBeanDefinition) container.getProxyBeanDefinition(wrapper.getName());
                 }
             }
 
@@ -125,6 +125,9 @@ public class ProxyBeanPostProcessor implements BeanPostProcessor {
     public void methodDeterminesProxy(BeanDefinition beanDefinition) {
         //方法决定代理类
         MethodDeterminesProxy determinesProxy = Container.getContainer().getBean(MethodDeterminesProxy.class);
+        if (null == determinesProxy) {
+            return;
+        }
         for (MethodStrategy strategy : determinesProxy.methodAnnotationClasses()) {
             Method[] declaredMethods = beanDefinition.getClz().getDeclaredMethods();
             List<Method> proxyMethodList = Arrays.stream(declaredMethods).filter(method -> ReflectUtil.containsAnnotation(method, strategy.getMethodAnnotation()))
