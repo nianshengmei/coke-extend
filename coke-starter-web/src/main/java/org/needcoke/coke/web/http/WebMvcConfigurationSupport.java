@@ -1,5 +1,6 @@
 package org.needcoke.coke.web.http;
 
+import org.needcoke.coke.web.interceptor.Interceptor;
 import pers.warren.ioc.annotation.Component;
 import pers.warren.ioc.core.ApplicationContext;
 

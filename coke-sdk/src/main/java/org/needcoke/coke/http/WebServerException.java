@@ -29,4 +29,7 @@ public class WebServerException extends RuntimeException {
 		super(message, cause);
 	}
 
+	public WebServerException(String message) {
+		super(message);
+	}
 }

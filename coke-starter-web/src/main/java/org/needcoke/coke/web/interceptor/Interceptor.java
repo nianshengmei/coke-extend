@@ -1,4 +1,4 @@
-package org.needcoke.coke.web.http;
+package org.needcoke.coke.web.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +13,7 @@ public interface Interceptor {
     /**
      * 前置拦截
      */
-    boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler);
+    boolean preHandle(HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 后置拦截
