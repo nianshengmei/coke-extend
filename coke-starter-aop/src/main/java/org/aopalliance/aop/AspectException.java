@@ -23,9 +23,6 @@ package org.aopalliance.aop;
  * <p>
  * 所有AOP基础结构异常的超类。未选中，因为此类异常是致命的，不应强制最终用户代码捕获它们。
  *
- * @author Rod Johnson
- * @author Bob Lee
- * @author Juergen Hoeller
  */
 @SuppressWarnings("serial")
 public class AspectException extends RuntimeException {

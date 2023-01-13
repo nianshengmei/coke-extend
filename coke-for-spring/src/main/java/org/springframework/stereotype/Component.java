@@ -26,12 +26,6 @@ import java.lang.annotation.*;
  * <p>Other class-level annotations may be considered as identifying
  * a component as well, typically a special kind of component:
  * e.g. the {@link Repository @Repository} annotation or AspectJ's
- *
- * @author Mark Fisher
- * @since 2.5
- * @see Repository
- * @see Service
- * @see Controller
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

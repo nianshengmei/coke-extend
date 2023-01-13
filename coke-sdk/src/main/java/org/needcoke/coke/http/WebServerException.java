@@ -18,9 +18,6 @@ package org.needcoke.coke.http;
 
 /**
  * Exceptions thrown by an web server.
- *
- * @author Phillip Webb
- * @since 2.0.0
  */
 @SuppressWarnings("serial")
 public class WebServerException extends RuntimeException {

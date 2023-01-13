@@ -36,7 +36,7 @@ import java.lang.reflect.AccessibleObject;
  * joinpoint. It is passed to the interceptors that are installed on
  * the static joinpoint.
  *
- * @author Rod Johnson
+ *
  * @see Interceptor
  */
 public interface Joinpoint {

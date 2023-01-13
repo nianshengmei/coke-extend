@@ -27,7 +27,7 @@ import java.lang.reflect.Constructor;
  * <p>A constructor invocation is a joinpoint and can be intercepted
  * by a constructor interceptor.
  *
- * @author Rod Johnson
+ *
  * @see ConstructorInterceptor
  */
 public interface ConstructorInvocation extends Invocation {

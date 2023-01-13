@@ -31,11 +31,6 @@ import java.lang.annotation.*;
  *
  * <p>This annotation serves as a specialization of {@link Component @Component},
  * allowing for implementation classes to be autodetected through classpath scanning.
- *
- * @author Juergen Hoeller
- * @since 2.5
- * @see Component
- * @see Repository
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
