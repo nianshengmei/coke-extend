@@ -38,4 +38,9 @@ public class ProxyBeanDefinition extends BeanDefinition {
      * 所有被代理的方法
      */
     protected List<Method> proxyMethodList;
+
+    @Override
+    public boolean isProxy() {
+        return true;
+    }
 }
