@@ -60,6 +60,7 @@
         <module>coke-data-transaction</module>
         <module>coke-starter-kafka</module>
         <module>coke-starter-test</module>
+        <module>coke-maven-plugin</module>
     </modules>
 
     <dependencyManagement>
