@@ -17,7 +17,6 @@
 package org.springframework.stereotype;
 
 import org.springframework.core.annotation.AliasFor;
-import pers.warren.ioc.annotation.Component;
 import java.lang.annotation.*;
 
 /**
@@ -35,7 +34,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Component
 public @interface Service {
 
 	/**

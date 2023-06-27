@@ -27,13 +27,20 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
             <version>3.5.1</version>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.mybatis</groupId>-->
+<!--                    <artifactId>mybatis-spring</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
         </dependency>
 
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.0.1</version>
+            <version>4.0.3</version>
         </dependency>
+
 
         <dependency>
             <groupId>io.gitee.needcoke</groupId>
@@ -45,6 +52,12 @@
             <groupId>io.gitee.needcoke</groupId>
             <artifactId>coke</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.gitee.needcoke</groupId>
+            <artifactId>coke-for-spring</artifactId>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 

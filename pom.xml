@@ -61,6 +61,7 @@
         <module>coke-starter-kafka</module>
         <module>coke-starter-test</module>
         <module>coke-maven-plugin</module>
+        <module>coke-data</module>
     </modules>
 
     <dependencyManagement>
