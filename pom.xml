@@ -62,6 +62,7 @@
         <module>coke-starter-test</module>
         <module>coke-maven-plugin</module>
         <module>coke-data</module>
+        <module>coke-language</module>
     </modules>
 
     <dependencyManagement>
