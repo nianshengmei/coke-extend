@@ -4,7 +4,7 @@ import org.needcoke.coke.web.annotation.HttpClient;
 import pers.warren.ioc.core.*;
 import pers.warren.ioc.enums.BeanType;
 
-public class HttpClientBeanRegister implements BeanRegister {
+public class HttpClientBeanRegister extends AnnotationBeanRegister {
     @Override
     public String getName(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         String beanName = null;

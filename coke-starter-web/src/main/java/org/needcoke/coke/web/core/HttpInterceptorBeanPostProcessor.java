@@ -15,6 +15,12 @@ import pers.warren.ioc.util.ReflectUtil;
 
 import java.lang.reflect.Method;
 
+/**
+ * http拦截器的后置处理器
+ *
+ * @author warren
+ * @since 1.0.3
+ */
 public class HttpInterceptorBeanPostProcessor implements BeanPostProcessor {
 
     @Override

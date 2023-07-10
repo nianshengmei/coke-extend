@@ -7,7 +7,7 @@ import pers.warren.ioc.enums.BeanType;
 import pers.warren.ioc.util.ReflectUtil;
 import pers.warren.ioc.util.StringUtil;
 
-public class MybatisPlusBeanRegister implements BeanRegister {
+public class MybatisPlusBeanRegister extends AnnotationBeanRegister {
 
 
     @Override

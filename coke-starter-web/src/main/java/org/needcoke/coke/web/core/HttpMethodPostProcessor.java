@@ -9,6 +9,7 @@ import org.needcoke.coke.web.http.Handler;
 import org.needcoke.coke.web.http.HttpType;
 import org.needcoke.coke.web.http.PathVariableRequestMappingHandler;
 import org.needcoke.coke.web.http.RequestMappingHandler;
+import org.needcoke.coke.web.util.WebReflectUtil;
 import pers.warren.ioc.core.BeanDefinition;
 import pers.warren.ioc.core.BeanPostProcessor;
 import pers.warren.ioc.core.BeanRegister;
@@ -44,76 +45,69 @@ public class HttpMethodPostProcessor implements BeanPostProcessor {
                         if (value.contains("{") && value.contains("}")) {
                             List<ParamAnnotation> paramAnnotations = getParamAnnotations(declaredMethod, PathVariable.class);
                             if (CollUtil.isEmpty(paramAnnotations)) {
-                                throw new RuntimeException(getMapping(mappings[0],value)+" must have @PathVariable annotation !");
+                                throw new RuntimeException(getMapping(mappings[0], value) + " must have @PathVariable annotation !");
                             }
 
-                            if(CollUtil.size(paramAnnotations) > 1){
-                                throw new RuntimeException("a request mapping must hava only PathVariable !  mapping = "+getMapping(mappings[0],value));
+                            if (CollUtil.size(paramAnnotations) > 1) {
+                                throw new RuntimeException("a request mapping must hava only PathVariable !  mapping = " + getMapping(mappings[0], value));
                             }
-                            pathVariableValue= ((PathVariable)paramAnnotations.get(0).getAnnotation()).value();
-                            pathVariableValue = StrUtil.isNotEmpty(pathVariableValue)?pathVariableValue:paramAnnotations.get(0).getParameterName();
+                            pathVariableValue = ((PathVariable) paramAnnotations.get(0).getAnnotation()).value();
+                            pathVariableValue = StrUtil.isNotEmpty(pathVariableValue) ? pathVariableValue : paramAnnotations.get(0).getParameterName();
                             key = paramAnnotations.get(0).getParameterName();
                         }
                         for (String mapping : mappings) {
-                            applicationContext.putHandler(HttpType.GET.name() + " " + getMapping(mapping,value),newHandler(HttpType.GET,beanDefinition.getName(),declaredMethod,pathVariableValue,key,getMapping(mapping,value)));
+                            applicationContext.putHandler(HttpType.GET.name() + " " + getMapping(mapping, value), newHandler(HttpType.GET, beanDefinition.getName(), declaredMethod, pathVariableValue, key, getMapping(mapping, value)));
                         }
                     }
 
                     if (ReflectUtil.containsAnnotation(declaredMethod, POST.class)) {
-                        if (ReflectUtil.containsAnnotation(declaredMethod, POST.class)) {
-                            POST postAnnotation = declaredMethod.getAnnotation(POST.class);
-                            String value = postAnnotation.value();
-                            String pathVariableValue = null;
-                            String key = null;
-                            if (value.contains("{") && value.contains("}")) {
-                                List<ParamAnnotation> paramAnnotations = getParamAnnotations(declaredMethod, PathVariable.class);
-                                if (CollUtil.isEmpty(paramAnnotations)) {
-                                    throw new RuntimeException(getMapping(mappings[0],value)+" must have @PathVariable annotation !");
-                                }
+                        POST postAnnotation = declaredMethod.getAnnotation(POST.class);
+                        String value = postAnnotation.value();
+                        String pathVariableValue = null;
+                        String key = null;
+                        if (value.contains("{") && value.contains("}")) {
+                            List<ParamAnnotation> paramAnnotations = getParamAnnotations(declaredMethod, PathVariable.class);
+                            if (CollUtil.isEmpty(paramAnnotations)) {
+                                throw new RuntimeException(getMapping(mappings[0], value) + " must have @PathVariable annotation !");
+                            }
 
-                                if(CollUtil.size(paramAnnotations) > 1){
-                                    throw new RuntimeException("a request mapping must hava only PathVariable !  mapping = "+getMapping(mappings[0],value));
-                                }
-                                pathVariableValue= ((PathVariable)paramAnnotations.get(0).getAnnotation()).value();
-                                pathVariableValue = StrUtil.isNotEmpty(pathVariableValue)?pathVariableValue:paramAnnotations.get(0).getParameterName();
-                                key = paramAnnotations.get(0).getParameterName();
+                            if (CollUtil.size(paramAnnotations) > 1) {
+                                throw new RuntimeException("a request mapping must hava only PathVariable !  mapping = " + getMapping(mappings[0], value));
                             }
-                            for (String mapping : mappings) {
-                                applicationContext.putHandler(HttpType.POST.name() + " " + getMapping(mapping,value),newHandler(HttpType.POST,beanDefinition.getName(),declaredMethod,pathVariableValue,key,getMapping(mapping,value)));
-                            }
+                            pathVariableValue = ((PathVariable) paramAnnotations.get(0).getAnnotation()).value();
+                            pathVariableValue = StrUtil.isNotEmpty(pathVariableValue) ? pathVariableValue : paramAnnotations.get(0).getParameterName();
+                            key = paramAnnotations.get(0).getParameterName();
+                        }
+                        for (String mapping : mappings) {
+                            applicationContext.putHandler(HttpType.POST.name() + " " + getMapping(mapping, value), newHandler(HttpType.POST, beanDefinition.getName(), declaredMethod, pathVariableValue, key, getMapping(mapping, value)));
                         }
                     }
 
                     if (ReflectUtil.containsAnnotation(declaredMethod, PUT.class)) {
-                        if (ReflectUtil.containsAnnotation(declaredMethod, PUT.class)) {
-                            PUT putAnnotation = declaredMethod.getAnnotation(PUT.class);
-                            String value = putAnnotation.value();
-                            for (String mapping : mappings) {
-                                applicationContext.putHandler(HttpType.PUT.name() + " " + getMapping(mapping,value)
-                                        ,newHandler(HttpType.PUT,beanDefinition.getName(),declaredMethod,null,null,null));
-                            }
+                        PUT putAnnotation = declaredMethod.getAnnotation(PUT.class);
+                        String value = putAnnotation.value();
+                        for (String mapping : mappings) {
+                            applicationContext.putHandler(HttpType.PUT.name() + " " + getMapping(mapping, value)
+                                    , newHandler(HttpType.PUT, beanDefinition.getName(), declaredMethod, null, null, null));
                         }
+
                     }
 
                     if (ReflectUtil.containsAnnotation(declaredMethod, DELETE.class)) {
-                        if (ReflectUtil.containsAnnotation(declaredMethod, DELETE.class)) {
-                            DELETE deleteAnnotation = declaredMethod.getAnnotation(DELETE.class);
-                            String value = deleteAnnotation.value();
-                            for (String mapping : mappings) {
-                                applicationContext.putHandler(HttpType.DELETE.name() + " " + getMapping(mapping,value)
-                                        ,newHandler(HttpType.DELETE,beanDefinition.getName(),declaredMethod,null,null,null));
-                            }
+                        DELETE deleteAnnotation = declaredMethod.getAnnotation(DELETE.class);
+                        String value = deleteAnnotation.value();
+                        for (String mapping : mappings) {
+                            applicationContext.putHandler(HttpType.DELETE.name() + " " + getMapping(mapping, value)
+                                    , newHandler(HttpType.DELETE, beanDefinition.getName(), declaredMethod, null, null, null));
                         }
                     }
 
                     if (ReflectUtil.containsAnnotation(declaredMethod, PATCH.class)) {
-                        if (ReflectUtil.containsAnnotation(declaredMethod, PATCH.class)) {
-                            PATCH patchAnnotation = declaredMethod.getAnnotation(PATCH.class);
-                            String value = patchAnnotation.value();
-                            for (String mapping : mappings) {
-                                applicationContext.putHandler(HttpType.PATCH.name() + " " + getMapping(mapping,value)
-                                        ,newHandler(HttpType.PATCH,beanDefinition.getName(),declaredMethod,null,null,null));
-                            }
+                        PATCH patchAnnotation = declaredMethod.getAnnotation(PATCH.class);
+                        String value = patchAnnotation.value();
+                        for (String mapping : mappings) {
+                            applicationContext.putHandler(HttpType.PATCH.name() + " " + getMapping(mapping, value)
+                                    , newHandler(HttpType.PATCH, beanDefinition.getName(), declaredMethod, null, null, null));
                         }
                     }
                 }
@@ -132,34 +126,34 @@ public class HttpMethodPostProcessor implements BeanPostProcessor {
         return clzMp + methodMp;
     }
 
-    private List<ParamAnnotation> getParamAnnotations(Method method, Class annotationClz){
+    private List<ParamAnnotation> getParamAnnotations(Method method, Class annotationClz) {
         List<ParamAnnotation> annotationList = new ArrayList<>();
         Parameter[] parameters = method.getParameters();
-        String[] parameterNames = ReflectUtil.getParameterNames(method);
+        String[] parameterNames = WebReflectUtil.getParameterNames(method);
         for (int i = 0; i < parameters.length; i++) {
             Annotation annotation = parameters[i].getAnnotation(annotationClz);
-            if(null != annotation){
+            if (null != annotation) {
                 annotationList.add(new ParamAnnotation().setAnnotation(annotation).setParameter(parameters[i]).setParameterName(parameterNames[i]));
             }
         }
         return annotationList;
     }
 
-    private Handler newHandler(HttpType httpType,String invokeBeanName,Method invokeMethod,String pathVariableValue,String key,String mapping){
+    private Handler newHandler(HttpType httpType, String invokeBeanName, Method invokeMethod, String pathVariableValue, String key, String mapping) {
         RequestMappingHandler handler = null;
-        if(StrUtil.isNotEmpty(pathVariableValue)){
-            mapping = mapping.replaceAll("\\{"+pathVariableValue+"}","*");
-            String [] pathArr = mapping.split("/");
+        if (StrUtil.isNotEmpty(pathVariableValue)) {
+            mapping = mapping.replaceAll("\\{" + pathVariableValue + "}", "*");
+            String[] pathArr = mapping.split("/");
             handler = new PathVariableRequestMappingHandler().setKey(key).setPathArr(pathArr);
-        }else{
+        } else {
             handler = new RequestMappingHandler();
         }
         return handler.setHttpType(httpType).setInvokeMethod(invokeMethod).setInvokeBeanName(invokeBeanName);
     }
 
-    private boolean isPathVariable(String url){
+    private boolean isPathVariable(String url) {
         //TODO 正则判断规范
-        if (url.contains("{") && url.contains("}")){
+        if (url.contains("{") && url.contains("}")) {
             return true;
         }
         return false;

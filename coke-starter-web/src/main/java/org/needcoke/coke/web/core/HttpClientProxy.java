@@ -10,7 +10,7 @@ import okhttp3.ResponseBody;
 import org.needcoke.coke.web.annotation.*;
 import org.needcoke.coke.web.client.*;
 import org.needcoke.coke.web.http.HttpType;
-import pers.warren.ioc.util.ReflectUtil;
+import org.needcoke.coke.web.util.WebReflectUtil;
 import pers.warren.ioc.util.SerializeUtil;
 
 import java.io.Serializable;
@@ -214,7 +214,7 @@ public class HttpClientProxy implements InvocationHandler, Serializable {
                 String errorMsg = String.format("not support http method  %s , %s", clientInterface.getTypeName(), method.getName());
                 throw new WebClientException(errorMsg);
         }
-        String[] parameterNames = ReflectUtil.getParameterNames(method);
+        String[] parameterNames = WebReflectUtil.getParameterNames(method);
         Parameter[] parameters = method.getParameters();
         List<HttpMethodParamNameInfo> paramMap = new ArrayList<>();
         List<HttpMethodParamNameInfo> headerMap = new ArrayList<>();

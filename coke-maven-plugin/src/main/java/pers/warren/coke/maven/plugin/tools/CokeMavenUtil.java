@@ -31,7 +31,7 @@ import java.util.jar.JarFile;
  * @author songyinyin
  * @since 2023/4/9 20:10
  */
-public class SolonMavenUtil {
+public class CokeMavenUtil {
 
     private static final String DOT_CLASS = ".class";
 

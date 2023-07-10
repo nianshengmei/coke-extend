@@ -1,11 +1,10 @@
 package org.needcoke.coke.web.core;
 
 import org.needcoke.coke.annotation.Controller;
-import org.needcoke.coke.web.annotation.ControllerAdvice;
 import pers.warren.ioc.core.*;
 import pers.warren.ioc.enums.BeanType;
 
-public class WebBeanRegister implements BeanRegister {
+public class WebBeanRegister extends AnnotationBeanRegister {
     @Override
     public String getName(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         String beanName = null;
